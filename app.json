@@ -1,0 +1,15 @@
+{
+	"name": "heroku-test",
+	"scripts": {
+		"postbuild": "cd frontend && npm install && npm run build"
+	},
+	"buildpacks": [
+		{
+			"url": "heroku/python"
+		},
+		{
+			"url": "heroku/nodejs"
+		}
+	],
+	"cacheDirectories": ["frontend/node_modules"]
+}
