@@ -6,7 +6,7 @@ app = Flask(__name__, static_folder="../frontend/dist", static_url_path="/")
 
 @app.get("/api")
 def api():
-    return "just testing"
+    return "just testing again"
 
 
 @app.route("/", defaults={"path": ""})
