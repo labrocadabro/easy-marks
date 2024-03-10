@@ -1,0 +1,12 @@
+{
+	"name": "heroku-test",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"heroku-postbuild": "cd frontend && npm install && npm run build"
+	},
+	"cacheDirectories": [
+		"frontend/node_modules"
+	]
+}
