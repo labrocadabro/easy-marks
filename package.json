@@ -8,5 +8,9 @@
 	},
 	"cacheDirectories": [
 		"frontend/node_modules"
-	]
+	],
+	"dependencies": {
+		"flowbite": "^2.3.0",
+		"flowbite-react": "^0.7.2"
+	}
 }
