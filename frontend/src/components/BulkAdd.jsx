@@ -1,4 +1,12 @@
-import { Button, Label, FileInput } from 'flowbite-react'
+import { Button, Label, FileInput, Flowbite } from 'flowbite-react'
+
+const customTheme = {
+	button: {
+		color: {
+			primary: "bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white",
+		}
+	}
+}
 
 function BulkAdd() {
   return (
@@ -9,8 +17,10 @@ function BulkAdd() {
 				</div>
 				<FileInput id='file' name='file'
 					helperText='Upload .csv or .md files to upload bookmarks' />
-				<Button className='mt-6' type='submit' 
-					color='green'>Upload file</Button>
+				<Flowbite theme={{ theme:customTheme }}>
+					<Button className='mt-6' type='submit' 
+						color='primary'>Upload file</Button>
+				</Flowbite>
 			</div>
     </>
   )
