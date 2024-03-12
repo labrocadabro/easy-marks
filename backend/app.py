@@ -1,7 +1,7 @@
 from flask import Flask
 
 
-app = Flask(__name__, static_folder="../frontend/dist", static_url_path="/")
+app = Flask(__name__, static_folder="../frontend/dist", static_url_path="")
 
 
 @app.get("/api")
@@ -12,4 +12,9 @@ def api():
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def catch_all(path):
+    return app.send_static_file("index.html")
+
+
+@app.errorhandler(404)
+def not_found(e):
     return app.send_static_file("index.html")
