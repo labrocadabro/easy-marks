@@ -12,7 +12,7 @@ function SingleAdd() {
 					<TextInput id='url' type='link' name='url'
 						placeholder='https://example.com' required rightIcon={HiLink} />
 				</div>
-				<Button color="green" type='submit'>Add URL</Button>
+				<Button type='submit' color='green'>Add URL</Button>
 			</form>
     </>
   )

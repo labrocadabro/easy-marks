@@ -9,8 +9,8 @@ function BulkAdd() {
 				</div>
 				<FileInput id='file' name='file' 
 					helperText='Upload a CSV or Markdown file of your bookmarks' />
-				<Button className='mb-2 mt-4' color="green"
-          type='submit'>Upload file</Button>
+				<Button className='mb-2 mt-4' type='submit' 
+					color='green'>Upload file</Button>
 			</div>
     </>
   )
