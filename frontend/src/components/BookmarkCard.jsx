@@ -1,15 +1,23 @@
+import { Card } from 'flowbite-react';
+
 function BookmarkCard() {
-	return (
-		<div className="mt-8 rounded overflow-hidden shadow-md w-full sm:w-4/12">
-			<img src="google.png" className="w-full object-cover" />
-			<div className="text-gray-600 m-4">
-				{/* Title */}
-				<h2 className="mb-2">Google</h2>
-				{/* Description */}
-				<div className="block">That's where you find shit</div>
-			</div>
-		</div>
-	);
+  return (
+	<a href='https://www.google.com/' target='_blank'>
+		<Card
+		className="max-w-sm"
+		imgAlt="Meaningful alt text for the image"
+		imgSrc="google.png"
+		>
+		<h5 className="text-2xl font-bold tracking-tight text-gray-600 dark:text-white">
+			Google
+		</h5>
+		<p className="font-normal text-gray-700 dark:text-gray-400">
+			That's where you find shit!
+		</p>
+		</Card>
+	</a>
+  );
 }
+
 
 export default BookmarkCard;
