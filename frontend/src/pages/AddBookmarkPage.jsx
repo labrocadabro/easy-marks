@@ -9,6 +9,7 @@ function AddBookmarkPage() {
 			<div className="flex flex-col mx-auto max-w-2xl">
 				<h1 className="text-2xl font-bold mb-4 text-center">Add Bookmarks</h1>
 
+				{/* Tabs component to switch between single/bulk add */}
 				<Tabs style='fullWidth'>
 					<Tabs.Item active title='Add URL' icon={HiLink}>
 						<SingleAdd />

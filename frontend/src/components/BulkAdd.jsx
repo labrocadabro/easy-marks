@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Button, Label, FileInput, Flowbite, Toast } from 'flowbite-react'
 import { HiCheck, HiOutlineExclamation } from 'react-icons/hi'
 
+// Custom theme to style submit button
 const customTheme = {
 	button: {
 		color: {
@@ -16,6 +17,7 @@ function BulkAdd() {
 	const [validFile, setValidFile] = useState(false);
 	let fileReader;
 
+	// UseEffect to reset flags after 3 seconds if toast not dismissed
 	useEffect(() => {
 		const timer = setTimeout(() => {
 			setSubmitted(false);
@@ -24,11 +26,13 @@ function BulkAdd() {
 		return () => clearTimeout(timer);
 	}, [submitted, validFile]);
 
+	// Display contents of file to console for testing
 	const handleFileRead = (e) => {
 		const content = fileReader.result;
 		console.log(content); // Remove later before deployment
 	}
 
+	// Read file contents and set file name
 	const handleFileChosen = (file) => {
 		setFileName(file.name);
 		fileReader = new FileReader();
@@ -36,11 +40,22 @@ function BulkAdd() {
 		fileReader.readAsText(file);
 	}
 
+	// Handle file upload (just validates file type for now)
 	const handleUpload = () => {
 		setSubmitted(true)
-		if (fileName.split('.').pop() === 'csv' || fileName.split('.').pop() === 'md') {
+
+		// Grab file extension from fileName
+		let ext = fileName.split('.').pop();
+
+		if (ext === 'csv' || ext === 'md') {
 			setValidFile(true);
 		}
+	}
+
+	// Reset flags after Toast is dismissed
+	const resetFlags = () => {
+		setSubmitted(false);
+		setValidFile(false);
 	}
 
   return (
@@ -59,6 +74,7 @@ function BulkAdd() {
 				</Flowbite>
 			</div>
 
+			{/* Successful upload */}
 			{submitted && validFile &&
 				<div className='flex flex-col items-center mt-6'>
 					<Toast>
@@ -66,11 +82,12 @@ function BulkAdd() {
 							<HiCheck className="h-5 w-5" />
 						</div>
 						<div className="ml-3 text-sm font-normal">File uploaded.</div>
-						<Toast.Toggle />
+						<Toast.Toggle onDismiss={resetFlags} />
 					</Toast>
 				</div>
 			}
 
+			{/* Invalid file type */}
 			{submitted && !validFile &&
 				<div className='flex flex-col items-center mt-6'>
 					<Toast>
@@ -78,7 +95,7 @@ function BulkAdd() {
 							<HiOutlineExclamation className="h-5 w-5" />
 						</div>
 						<div className="ml-3 text-sm font-normal">Invalid file type.</div>
-						<Toast.Toggle />
+						<Toast.Toggle onDismiss={resetFlags} />
 					</Toast>
 				</div>
 			}
