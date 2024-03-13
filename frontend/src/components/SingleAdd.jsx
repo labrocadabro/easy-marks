@@ -2,34 +2,34 @@ import { useState, useEffect } from 'react'
 import { Button, Label, TextInput, Toast, Flowbite } from 'flowbite-react'
 import { HiLink, HiCheck, HiOutlineExclamation } from 'react-icons/hi'
 
+const customTheme = {
+	button: {
+		color: {
+			primary: "bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white",
+		}
+	}
+}
+
 function SingleAdd() {
 	const [url, setUrl] = useState('')
 	const [submitted, setSubmitted] = useState(false)
 	const [validUrl, setValidUrl] = useState(false)
 
-	const customTheme = {
-		button: {
-			color: {
-				primary: "bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white",
-			}
-		}
-	}
-
 	useEffect(() => {
 		const timer = setTimeout(() => {
-			setSubmitted(false)
-			setValidUrl(false)
+			setSubmitted(false);
+			setValidUrl(false);
 		}, 3000)
-		return () => clearTimeout(timer)
-	}, [submitted, validUrl])
+		return () => clearTimeout(timer);
+	}, [submitted, validUrl]);
 
 	const handleSubmit = () =>{
-		setSubmitted(true)
-		setValidUrl(isValidUrl(url))
+		setSubmitted(true);
+		setValidUrl(isValidUrl(url));
 	}
 
 	const updateInput = (e) => {
-		setUrl(e.target.value)
+		setUrl(e.target.value);
 	}
 
 	const isValidUrl = urlString => {
@@ -65,7 +65,7 @@ function SingleAdd() {
 			{submitted && validUrl &&
 				<div className='flex flex-col items-center mt-6'>
 					<Toast>
-						<div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
+						<div className="inline-flex h-8 w-8 shrink-0 items-center 		   justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
 							<HiCheck className="h-5 w-5" />
 						</div>
 						<div className="ml-3 text-sm font-normal">Bookmark added successfully.</div>
