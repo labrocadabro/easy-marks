@@ -175,5 +175,6 @@ def valid_session(request):
                 "valid": True,
                 "photo": profile_data.get("picture"),
                 "firstName": profile_data.get("given_name"),
+                "accessToken": access_token,
             }
         )
