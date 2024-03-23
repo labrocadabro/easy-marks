@@ -29,6 +29,26 @@ function SingleAdd() {
 	const handleSubmit = () =>{
 		setSubmitted(true);
 		setValidUrl(isValidUrl(url));
+
+		// If valid URL, insert into DB via POST request
+		if (validUrl) {
+			fetch('http://localhost:5000/insert', {
+				method: 'POST',
+				mode: 'cors',
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': 'application/json'
+				},
+				body: JSON.stringify({ url: url })
+			})
+			.then(response => response.json())
+			.then(data => {
+				console.log('Success:', data);
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			});
+		}
 	}
 
 	// Update URL input as user types
@@ -62,10 +82,11 @@ function SingleAdd() {
 					<div className='mb-2'>
 						<Label htmlFor='url' value='URL' />
 					</div>
-					<TextInput id='url' type='link' name='url'
+					<TextInput id='url' name='url'
 						className='mb-6'
 						placeholder='https://example.com'
-						required rightIcon={HiLink}
+						required 
+						rightIcon={HiLink}
 						onChange={updateInput} />
 				</div>
 				<Flowbite theme={{ theme:customTheme }}>
