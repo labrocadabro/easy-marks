@@ -1,2 +1,7 @@
 flask
 gunicorn
+flask-cors
+flask-pymongo
+pymongo
+python-dotenv
+requests
