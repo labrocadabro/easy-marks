@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from pymongo import ReturnDocument
-from app import mongo
+from backend import mongo
 from .auth_utils import get_tokens, get_profile_data, valid_session
 
 auth = Blueprint("auth", __name__)

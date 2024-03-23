@@ -26,6 +26,6 @@ def not_found(e):
     return app.send_static_file("index.html")
 
 
-from auth.auth import auth
+from .auth.auth import auth
 
 app.register_blueprint(auth)

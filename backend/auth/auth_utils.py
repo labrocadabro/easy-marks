@@ -1,6 +1,6 @@
 import os
 import requests
-from app import mongo
+from backend import mongo
 from bson.objectid import ObjectId
 
 
