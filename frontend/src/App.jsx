@@ -21,7 +21,7 @@ function App() {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${accessToken}`,
+					Authorization: `${accessToken}`,
 				},
 				body: JSON.stringify({
 					userId: window.sessionStorage.getItem("userId"),
