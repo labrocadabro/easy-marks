@@ -14,7 +14,6 @@ app = Flask(__name__, static_folder="../frontend/dist", static_url_path="")
 CORS(app)
 
 
-app.secret_key = os.getenv("SECRET_KEY")
 app.config["MONGO_URI"] = os.getenv("MONGODB_URI")
 mongo = PyMongo(app)
 
