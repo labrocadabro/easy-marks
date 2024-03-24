@@ -9,16 +9,18 @@ import NotFoundPage from "./pages/NotFoundPage";
 function App() {
 	return (
 		<>
-			<Header />
-			<main className="px-8 py-6 h-full">
-				<Routes>
-					<Route path="/" element={<HomePage />} />
-					<Route path="/bookmarks" element={<BookmarksPage />} />
-					<Route path="/add" element={<AddBookmarkPage />} />
-					<Route path="*" element={<NotFoundPage />} />
-				</Routes>
-			</main>
-			<Footer />
+			<div className="flex flex-col min-h-screen justify-between">
+				<Header />
+				<main className="flex-1 px-8 py-6 h-full">
+					<Routes>
+						<Route path="/" element={<HomePage />} />
+						<Route path="/bookmarks" element={<BookmarksPage />} />
+						<Route path="/add" element={<AddBookmarkPage />} />
+						<Route path="*" element={<NotFoundPage />} />
+					</Routes>
+				</main>
+				<Footer />
+			</div>
 		</>
 	);
 }
