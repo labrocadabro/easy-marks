@@ -16,39 +16,36 @@ function SingleAdd() {
 	const [submitted, setSubmitted] = useState(false)
 	const [validUrl, setValidUrl] = useState(false)
 
-	// UseEffect to reset flags after 3 seconds if toast not dismissed
 	useEffect(() => {
-		const timer = setTimeout(() => {
-			setSubmitted(false);
-			setValidUrl(false);
-		}, 3000)
-		return () => clearTimeout(timer);
-	}, [submitted, validUrl]);
+		if (validUrl) {
+			// Send POST request to backend if URL is valid
+			fetch("http://127.0.0.1:5000/insert", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ url: url }),
+			})
+			.then((response) => response.json())
+			.then((data) => {
+					console.log("Success:", data);
+					// Reset flags after 3 seconds if toast not dismissed
+					const timer = setTimeout(() => {
+						setSubmitted(false);
+						setValidUrl(false);
+					}, 3000);
+					return () => clearTimeout(timer);
+				})
+				.catch((error) => {
+					console.error("Error:", error);
+			});
+		}
+}, [submitted, validUrl, url]);
 
 	// Handle form submission
 	const handleSubmit = () =>{
 		setSubmitted(true);
 		setValidUrl(isValidUrl(url));
-
-		// If valid URL, insert into DB via POST request
-		if (validUrl) {
-			fetch('http://localhost:5000/insert', {
-				method: 'POST',
-				mode: 'cors',
-				headers: {
-					'Content-Type': 'application/json',
-					'Accept': 'application/json'
-				},
-				body: JSON.stringify({ url: url })
-			})
-			.then(response => response.json())
-			.then(data => {
-				console.log('Success:', data);
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
-		}
 	}
 
 	// Update URL input as user types
