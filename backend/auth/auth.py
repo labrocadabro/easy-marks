@@ -1,3 +1,5 @@
+"""Auth Endpoints"""
+
 from flask import Blueprint, request, jsonify
 from pymongo import ReturnDocument
 from backend import mongo

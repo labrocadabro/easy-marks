@@ -1,3 +1,5 @@
+"""Main module of the Flask Server"""
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_pymongo import PyMongo
@@ -27,5 +29,7 @@ def not_found(e):
 
 
 from .auth.auth import auth
+from .database.db import db
 
 app.register_blueprint(auth)
+app.register_blueprint(db)
