@@ -1,8 +1,49 @@
+import { googleLogout, useGoogleLogin } from "@react-oauth/google";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 import { Link } from "react-router-dom";
+import { Avatar, Dropdown } from "flowbite-react";
 
 function Header() {
+	const [loggedIn, setLoggedIn, photo, setPhoto, firstName, setFirstName] =
+		useContext(UserContext);
+
+	const login = useGoogleLogin({
+		flow: "auth-code",
+		onSuccess: (response) => {
+			fetch("http://127.0.0.1:5000/login", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ code: response.code }),
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					if (data?.success) {
+						setLoggedIn(true);
+						setPhoto(data.photo);
+						setFirstName(data.firstName);
+						window.sessionStorage.setItem("accessToken", data.accessToken);
+						window.sessionStorage.setItem("userId", data.userId);
+					}
+				});
+		},
+		onError: (errorResponse) => {
+			console.log(errorResponse);
+			setLoggedIn(false);
+		},
+	});
+
+	const logOut = () => {
+		googleLogout();
+		window.sessionStorage.removeItem("accessToken");
+		window.sessionStorage.removeItem("userId");
+		setLoggedIn(false);
+	};
+
 	return (
-		<header className="bg-slate-100 px-8 py-4">
+		<header className="bg-slate-100 px-8 py-2 flex justify-between h-20 items-center">
 			<nav>
 				<ul className="flex gap-6">
 					<li>
@@ -22,6 +63,25 @@ function Header() {
 					</li>
 				</ul>
 			</nav>
+			{loggedIn ? (
+				<>
+					<Dropdown
+						label={<Avatar alt="User settings" img={photo} rounded />}
+						arrowIcon={false}
+						inline
+					>
+						<Dropdown.Header>
+							<span className="block text-sm">Logged in as {firstName}</span>
+						</Dropdown.Header>
+						<Dropdown.Item>Dashboard</Dropdown.Item>
+						<Dropdown.Item>Settings</Dropdown.Item>
+						<Dropdown.Divider />
+						<Dropdown.Item onClick={logOut}>Sign out</Dropdown.Item>
+					</Dropdown>
+				</>
+			) : (
+				<button onClick={login}>Sign in with Google</button>
+			)}
 		</header>
 	);
 }
