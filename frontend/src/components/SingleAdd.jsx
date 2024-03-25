@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Button, Label, TextInput, Toast, Flowbite } from 'flowbite-react'
 import { HiLink, HiCheck, HiOutlineExclamation } from 'react-icons/hi'
-import { server } from '../server'
+import { server } from '../config/server'
 
 // Custom theme to style submit button
 const customTheme = {
