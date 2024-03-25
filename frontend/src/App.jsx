@@ -55,16 +55,18 @@ function App() {
 					setFirstName,
 				]}
 			>
-				<Header />
-				<main className="px-8 py-6 h-full">
-					<Routes>
-						<Route path="/" element={<HomePage />} />
-						<Route path="/bookmarks" element={<BookmarksPage />} />
-						<Route path="/add" element={<AddBookmarkPage />} />
-						<Route path="*" element={<NotFoundPage />} />
-					</Routes>
-				</main>
-				<Footer />
+				<div className="flex flex-col min-h-screen justify-between">
+					<Header />
+					<main className="px-8 py-6 h-full">
+						<Routes>
+							<Route path="/" element={<HomePage />} />
+							<Route path="/bookmarks" element={<BookmarksPage />} />
+							<Route path="/add" element={<AddBookmarkPage />} />
+							<Route path="*" element={<NotFoundPage />} />
+						</Routes>
+					</main>
+					<Footer />
+				</div>
 			</UserContext.Provider>
 		</>
 	);
