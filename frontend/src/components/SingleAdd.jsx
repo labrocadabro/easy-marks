@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Button, Label, TextInput, Toast, Flowbite } from 'flowbite-react'
 import { HiLink, HiCheck, HiOutlineExclamation } from 'react-icons/hi'
+import { server } from '../server'
 
 // Custom theme to style submit button
 const customTheme = {
@@ -19,7 +20,7 @@ function SingleAdd() {
 	useEffect(() => {
 		if (validUrl) {
 			// Send POST request to backend if URL is valid
-			fetch("http://127.0.0.1:5000/insert", {
+			fetch(`${server}/insert`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
