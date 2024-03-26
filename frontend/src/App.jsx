@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { UserContext } from "./context/UserContext";
+import { server } from "./config/server";
 import Header from "./layout/Header";
 import Footer from "./layout/Footer";
 import HomePage from "./pages/HomePage";
@@ -17,7 +18,7 @@ function App() {
 		const accessToken = window.sessionStorage.getItem("accessToken");
 		console.log(accessToken);
 		if (accessToken) {
-			fetch("http://127.0.0.1:5000/session", {
+			fetch(`${server}/session`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

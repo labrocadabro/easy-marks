@@ -2,6 +2,7 @@ import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { Link } from "react-router-dom";
+import { server } from "../config/server";
 import { Avatar, Dropdown } from "flowbite-react";
 
 function Header() {
@@ -11,7 +12,7 @@ function Header() {
 	const login = useGoogleLogin({
 		flow: "auth-code",
 		onSuccess: (response) => {
-			fetch("http://127.0.0.1:5000/login", {
+			fetch(`${server}/login`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
