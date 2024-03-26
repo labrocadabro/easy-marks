@@ -1,3 +1,5 @@
+"""Auth Utility Functions"""
+
 import os
 import requests
 from backend import mongo

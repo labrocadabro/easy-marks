@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Button, Label, TextInput, Toast, Flowbite } from 'flowbite-react'
 import { HiLink, HiCheck, HiOutlineExclamation } from 'react-icons/hi'
+import { server } from '../config/server'
 
 // Custom theme to style submit button
 const customTheme = {
@@ -16,14 +17,31 @@ function SingleAdd() {
 	const [submitted, setSubmitted] = useState(false)
 	const [validUrl, setValidUrl] = useState(false)
 
-	// UseEffect to reset flags after 3 seconds if toast not dismissed
 	useEffect(() => {
-		const timer = setTimeout(() => {
-			setSubmitted(false);
-			setValidUrl(false);
-		}, 3000)
-		return () => clearTimeout(timer);
-	}, [submitted, validUrl]);
+		if (validUrl) {
+			// Send POST request to backend if URL is valid
+			fetch(`${server}/insert`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ url: url }),
+			})
+			.then((response) => response.json())
+			.then((data) => {
+					console.log("Success:", data);
+					// Reset flags after 3 seconds if toast not dismissed
+					const timer = setTimeout(() => {
+						setSubmitted(false);
+						setValidUrl(false);
+					}, 3000);
+					return () => clearTimeout(timer);
+				})
+				.catch((error) => {
+					console.error("Error:", error);
+			});
+		}
+}, [submitted, validUrl, url]);
 
 	// Handle form submission
 	const handleSubmit = () =>{
@@ -62,10 +80,11 @@ function SingleAdd() {
 					<div className='mb-2'>
 						<Label htmlFor='url' value='URL' />
 					</div>
-					<TextInput id='url' type='link' name='url'
+					<TextInput id='url' name='url'
 						className='mb-6'
 						placeholder='https://example.com'
-						required rightIcon={HiLink}
+						required 
+						rightIcon={HiLink}
 						onChange={updateInput} />
 				</div>
 				<Flowbite theme={{ theme:customTheme }}>
