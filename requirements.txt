@@ -5,3 +5,4 @@ flask-pymongo
 pymongo
 python-dotenv
 requests
+openai
