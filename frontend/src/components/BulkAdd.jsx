@@ -18,12 +18,14 @@ function BulkAdd() {
 	const [submitted, setSubmitted] = useState(false);
 	const [validFile, setValidFile] = useState(false);
 
-	// UseEffect to reset flags after 3 seconds if toast not dismissed
+	// UseEffect to handle file submission/POST request
 	useEffect(() => {
 		if (validFile) {
+			// Create form data to transmit file
 			let data = new FormData();
 			data.append('file', file);
 	
+			// Send file to server in POST request
 			fetch(`${server}/bulk`, {
 				method: "POST",
 				body: data,
@@ -44,7 +46,7 @@ function BulkAdd() {
 		}
 	}, [submitted, validFile, file, fileName]);
 
-	// Update varaibles when file is chosen
+	// Update variables when file is chosen
 	const handleFileChosen = (file) => {
 		setFileName(file.name);
 		setFile(file);
