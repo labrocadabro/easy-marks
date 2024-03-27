@@ -41,7 +41,7 @@ function SingleAdd() {
 					console.error("Error:", error);
 			});
 		}
-}, [submitted, validUrl, url]);
+	}, [submitted, validUrl, url]);
 
 	// Handle form submission
 	const handleSubmit = () =>{
