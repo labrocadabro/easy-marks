@@ -26,7 +26,7 @@ function BulkAdd() {
 			data.append('file', file);
 	
 			// Send file to server in POST request
-			fetch(`${server}/bulk`, {
+			fetch(`${server}/urls`, {
 				method: "POST",
 				body: data,
 			})
