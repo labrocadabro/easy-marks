@@ -31,8 +31,6 @@ def summarize(client, document):
             for line in result.summaries:
                 summary += line.text
         elif result.is_error is True:
-            print("...Is an error with code '{}' and message '{}'".format(
-                result.error.code, result.error.message
-            ))
+            print(f"...Is an error with code {result.error.code} and message {result.error.message}")
     
     return summary
