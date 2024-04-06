@@ -3,32 +3,29 @@
 
 import re
 import nltk
+import tldextract
 from bs4 import BeautifulSoup
 from unidecode import unidecode
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
+from playwright.sync_api import sync_playwright
 
 # function to return website title, text and save screenshot
 def get_website_data(url):
-    # obtain version of chromedriver compatible with browser
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
-    driver.get(url)
-    # taking screenshot
-    url_domain = ""
-    driver.save_screenshot('https://website.ca.png')
-    get_url = driver.current_url
-    # wait.until(EC.url_to_be(val))
-    if get_url == url:
-        page_source = driver.page_source
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        page.goto(url)
+        title = page.title()
+        content = page.content()
+
+        # using the subdomain+domain as image name
+        ext = tldextract.extract(url)
+        imgName = ext.subdomain + ext.domain
+        page.screenshot(path=f"backend\scraping\{imgName}.png")
+        browser.close()
+    
 
     # use beautiful soup to parse html content
-    soup = BeautifulSoup(page_source, features="html.parser")
-    title = soup.title.text
+    soup = BeautifulSoup(content, features="html.parser")
     # removing footer of website
     s = soup.find('footer')
     if s:
@@ -42,6 +39,9 @@ def get_website_data(url):
     clean_text = " ".join(clean_text.split())
     #remove non_ascii characters with regex
     clean_text = re.sub(r'[^\x00-\x7F]', ' ', clean_text)
+
+    #summarize takes a list and limit the document to 4000char (brute force)
+    clean_text = [clean_text[:4000]]
 
     return (title,clean_text)
 
