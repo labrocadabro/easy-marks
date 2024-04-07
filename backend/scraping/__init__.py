@@ -4,6 +4,7 @@ import re
 import tldextract
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
+from pathlib import Path
 
 
 # function to return website title, text and save screenshot
@@ -18,7 +19,10 @@ def get_website_data(url):
         # using the subdomain+domain as image name
         ext = tldextract.extract(url)
         imgName = ext.subdomain + ext.domain
-        screenshot_path = f"backend\scraping\{imgName}.png"
+
+        screenshot_path = (
+            Path(__file__).parent.parent.parent / f"frontend/public/{imgName}.png"
+        )
         page.screenshot(path=screenshot_path)
         browser.close()
 
