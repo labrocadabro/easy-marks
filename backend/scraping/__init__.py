@@ -1,5 +1,4 @@
-# receive url, send back text and screenshot URL
-# can probably save files locally on the server, or can upload to a cloud service
+"""Web Scraping - Playwright"""
 
 import re
 import tldextract
@@ -19,7 +18,8 @@ def get_website_data(url):
         # using the subdomain+domain as image name
         ext = tldextract.extract(url)
         imgName = ext.subdomain + ext.domain
-        page.screenshot(path=f"backend\scraping\{imgName}.png")
+        screenshot_path = f"backend\scraping\{imgName}.png"
+        page.screenshot(path=screenshot_path)
         browser.close()
 
     # use beautiful soup to parse html content
@@ -41,11 +41,4 @@ def get_website_data(url):
     # summarize takes a list and limit the document to 4000char (brute force)
     clean_text = [clean_text[:4000]]
 
-    return (title, clean_text)
-
-
-############ This is for testing purposes ##################
-if __name__ == "__main__":
-    title, urlText = get_website_data("https://quicktraincanada.ca/")
-    print(f"The title of the website is {title}.")
-    print(f"The website text is: \n", urlText)
+    return (title, clean_text, screenshot_path)

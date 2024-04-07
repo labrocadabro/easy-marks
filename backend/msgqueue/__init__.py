@@ -1,6 +1,7 @@
 """ Message queue (send) """
 
 from flask import Blueprint, request, jsonify
+from threading import Thread
 
 # from pymongo import ReturnDocument
 # from backend import mongo
@@ -23,7 +24,8 @@ def add_urls():
             for line in content.splitlines():
                 urls.append(line)
         for url in urls:
-            send(url)
+            thread = Thread(target=send, args=(url,))
+            thread.start()
         return jsonify({"success": True})
     except:
         return jsonify({"success": False, "message": "No file found in request"})
@@ -32,11 +34,9 @@ def add_urls():
 @queue.post("/url")
 def add_url():
     try:
-        print(request)
         url = request.json.get("url")
-        print("url", url)
-        # send(url)
-        print(f" [x] sent {url}")
-        return "success"
+        thread = Thread(target=send, args=(url,))
+        thread.start()
+        return jsonify({"success": True})
     except:
-        return "failure"
+        return jsonify({"success": False})

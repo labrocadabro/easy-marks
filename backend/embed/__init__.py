@@ -1,8 +1,3 @@
-# receive text, send back embedding
-def embed():
-    pass
-
-
 """Embedding Module - Azure OpenAI"""
 
 import os
@@ -20,6 +15,6 @@ client = AzureOpenAI(
 
 # Max input tokens = 8192
 # Max array input size = 2048
-def get_embedding(text):
+def embed(text):
     response = client.embeddings.create(input=text, model="text-embedding-ada-002")
     return response

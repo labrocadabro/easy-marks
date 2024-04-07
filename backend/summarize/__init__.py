@@ -1,4 +1,5 @@
-# receive text, send back summary
+"""Summarization Module - Azure"""
+
 import os
 from azure.ai.textanalytics import TextAnalyticsClient
 from azure.core.credentials import AzureKeyCredential
@@ -21,7 +22,7 @@ client = authenticate_client()
 
 
 # Example method for summarizing text
-def summarize(client, document):
+def summarize(document):
     # summarization takes list of documents(documents can be strings)
     poller = client.begin_abstract_summary(document)
     abstract_summary_results = poller.result()
