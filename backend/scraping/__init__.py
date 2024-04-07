@@ -10,7 +10,7 @@ from pathlib import Path
 # function to return website title, text and save screenshot
 def get_website_data(url):
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = p.chromium.launch({"chromiumSandbox": False})
         page = browser.new_page()
         page.goto(url)
         title = page.title()
