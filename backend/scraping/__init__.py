@@ -1,0 +1,52 @@
+# receive url, send back text and screenshot URL
+# can probably save files locally on the server, or can upload to a cloud service
+
+import re
+import nltk
+import tldextract
+from bs4 import BeautifulSoup
+from unidecode import unidecode
+from playwright.sync_api import sync_playwright
+
+# function to return website title, text and save screenshot
+def get_website_data(url):
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        page.goto(url)
+        title = page.title()
+        content = page.content()
+
+        # using the subdomain+domain as image name
+        ext = tldextract.extract(url)
+        imgName = ext.subdomain + ext.domain
+        page.screenshot(path=f"backend\scraping\{imgName}.png")
+        browser.close()
+    
+
+    # use beautiful soup to parse html content
+    soup = BeautifulSoup(content, features="html.parser")
+    # removing footer of website
+    s = soup.find('footer')
+    if s:
+        s.extract()
+    url_text = soup.get_text()
+
+    # cleaning text
+    # stripping out the newline indicator
+    clean_text = url_text.replace("\n", " ")
+    # removing extra spaces
+    clean_text = " ".join(clean_text.split())
+    #remove non_ascii characters with regex
+    clean_text = re.sub(r'[^\x00-\x7F]', ' ', clean_text)
+
+    #summarize takes a list and limit the document to 4000char (brute force)
+    clean_text = [clean_text[:4000]]
+
+    return (title,clean_text)
+
+############ This is for testing purposes ##################
+if __name__ == '__main__':
+    title, urlText = get_website_data('https://quicktraincanada.ca/')
+    print (f"The title of the website is {title}.")
+    print(f"The website text is: \n", urlText)
