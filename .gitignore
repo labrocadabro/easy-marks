@@ -25,5 +25,8 @@ dist-ssr
 *.sw?
 __pycache__
 
+# screenshots
+frontend/public
+
 # virtual environment
 .venv
