@@ -28,8 +28,8 @@ def not_found(e):
     return app.send_static_file("index.html")
 
 
-from .auth.auth import auth
-from .database.db import db
+from .auth import auth
+from .database import db
 
 app.register_blueprint(auth)
 app.register_blueprint(db)
