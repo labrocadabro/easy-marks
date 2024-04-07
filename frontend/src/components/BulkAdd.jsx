@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Button, Label, FileInput, Flowbite, Toast } from 'flowbite-react'
 import { HiCheck, HiOutlineExclamation } from 'react-icons/hi'
+import { server } from '../config/server'
 
 // Custom theme to style submit button
 const customTheme = {
@@ -12,35 +13,46 @@ const customTheme = {
 }
 
 function BulkAdd() {
+	const [file, setFile] = useState(null);
 	const [fileName, setFileName] = useState('');
 	const [submitted, setSubmitted] = useState(false);
 	const [validFile, setValidFile] = useState(false);
-	let fileReader;
 
-	// UseEffect to reset flags after 3 seconds if toast not dismissed
+	// UseEffect to handle file submission/POST request
 	useEffect(() => {
-		const timer = setTimeout(() => {
-			setSubmitted(false);
-			setValidFile(false);
-		}, 3000)
-		return () => clearTimeout(timer);
-	}, [submitted, validFile]);
+		if (validFile) {
+			// Create form data to transmit file
+			let data = new FormData();
+			data.append('file', file);
+	
+			// Send file to server in POST request
+			fetch(`${server}/urls`, {
+				method: "POST",
+				body: data,
+			})
+			.then((response) => response.json())
+			.then((data) => {
+				console.log("Success:", data);
+				// Reset flags after 3 seconds if toast not dismissed
+				const timer = setTimeout(() => {
+					setSubmitted(false);
+					setValidFile(false);
+				}, 3000)
+				return () => clearTimeout(timer);
+			})
+			.catch((error) => {
+				console.error("Error:", error);
+			});
+		}
+	}, [submitted, validFile, file, fileName]);
 
-	// Display contents of file to console for testing
-	const handleFileRead = (e) => {
-		const content = fileReader.result;
-		console.log(content); // Remove later before deployment
-	}
-
-	// Read file contents and set file name
+	// Update variables when file is chosen
 	const handleFileChosen = (file) => {
 		setFileName(file.name);
-		fileReader = new FileReader();
-		fileReader.onloadend = handleFileRead;
-		fileReader.readAsText(file);
+		setFile(file);
 	}
 
-	// Handle file upload (just validates file type for now)
+	// Handle file upload
 	const handleUpload = () => {
 		setSubmitted(true)
 
