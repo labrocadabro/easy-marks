@@ -5,12 +5,18 @@ import tldextract
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 from pathlib import Path
+import os
 
 
 # function to return website title, text and save screenshot
 def get_website_data(url):
     with sync_playwright() as p:
-        browser = p.chromium.launch({"chromiumSandbox": False})
+        # In order to get Heroku deployment to work ,the path to chromium has to be set in an env variable
+        # we can probably test is we're on localhost and switch this automatically but I'm tired of this right now
+        # browser = p.chromium.launch()
+        browser = p.chromium.launch(
+            executable_path=os.getenv("CHROMIUM_EXECUTABLE_PATH")
+        )
         page = browser.new_page()
         page.goto(url)
         title = page.title()
