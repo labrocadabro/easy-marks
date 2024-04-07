@@ -30,6 +30,8 @@ def not_found(e):
 
 from .auth import auth
 from .database import db
+from .msgqueue import queue
 
 app.register_blueprint(auth)
 app.register_blueprint(db)
+app.register_blueprint(queue)
