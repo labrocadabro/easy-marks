@@ -5,7 +5,7 @@ import { server } from "../config/server"
 
 
 function BookmarksPage() {
-	const [bookmarksList, setBookmarksList] = useState([])
+	const [bookmarksList, setBookmarksList] = useState(null)
 	const [searchState, setSearchState] = useState(null)
 	const [sendSearch, setSendSearch] = useState(false)
 
