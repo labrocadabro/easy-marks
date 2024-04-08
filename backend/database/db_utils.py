@@ -22,5 +22,5 @@ def insert(url, summary, img_path, embedding, title):
 
 
 def get_all():
-    fields = {"_id": 1, "title": 1, "summary": 1, "screenshot": 1}
+    fields = {"_id": 1, "title": 1, "summary": 1, "screenshot": 1, "url": 1}
     return mongo.db.urls.find({}, fields)
