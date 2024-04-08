@@ -69,6 +69,3 @@ def get_website_data(url):
     clean_text = [clean_text[:4000]]
 
     return (title, clean_text, result["secure_url"])
-
-
-get_website_data("https://digitalnovascotia.com/")
