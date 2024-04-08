@@ -19,3 +19,8 @@ def insert(url, summary, img_path, embedding, title):
 
 
 ### Other CRUD Operations will be added here ###
+
+
+def get_all():
+    fields = {"_id": 1, "title": 1, "summary": 1, "screenshot": 1}
+    return mongo.db.urls.find({}, fields)

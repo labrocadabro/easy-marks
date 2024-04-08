@@ -1,34 +1,44 @@
 import BookmarkCard from "../components/BookmarkCard";
-import { useState } from "react"
+import { useState, useEffect } from "react";
 import SearchBar from "../components/SearchBar";
-import data from "../data/bookmarks.json"
-
+import { server } from "../config/server";
 
 function BookmarksPage() {
-	const [bookmarksList, setBookmarksList] = useState(data)
-	const [searchState, setSearchState] = useState(null)
+	const [bookmarksList, setBookmarksList] = useState(null);
+	const [searchState, setSearchState] = useState(null);
 
 	const handleSearchStateChange = (value) => {
-		console.log("A search was submitted: " + value)
-		setSearchState(value)
-	}
+		console.log("A search was submitted: " + value);
+		setSearchState(value);
+	};
 
-	let bookmarkCardsList = []
-
-	for (const i of bookmarksList) {
-		bookmarkCardsList.push(<BookmarkCard key={i.key} data={i} />)
-	}
+	useEffect(() => {
+		fetch(`${server}/bookmarks`)
+			.then((res) => res.json())
+			.then((data) => {
+				const bookmarks = JSON.parse(data).map((item) => ({
+					id: item._id._oid,
+					url: item.url,
+					title: item.title,
+					description: item.summary,
+					image: item.screenshot,
+				}));
+				setBookmarksList(bookmarks);
+			})
+			.catch((e) => console.log(e));
+	}, []);
 
 	return (
 		<>
-
 			<h1 className="text-2xl font-bold mb-4 text-center">View Bookmarks</h1>
 			<SearchBar onSearch={handleSearchStateChange} />
 			<div className="h-56 grid grid-cols-4 gap-5 content-start">
-				{bookmarkCardsList}	
+				{bookmarksList
+					? bookmarksList.map((bookmark) => (
+							<BookmarkCard key={bookmark.id} data={bookmark} />
+					  ))
+					: "No bookmarks yet"}
 			</div>
-
-
 		</>
 	);
 }
