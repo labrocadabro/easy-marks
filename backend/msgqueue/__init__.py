@@ -2,6 +2,7 @@
 
 from flask import Blueprint, request, jsonify
 from threading import Thread
+from backend.database.db_utils import url_prefixer
 
 # from pymongo import ReturnDocument
 # from backend import mongo
@@ -24,6 +25,7 @@ def add_urls():
             for line in content.splitlines():
                 urls.append(line)
         for url in urls:
+            url = url_prefixer(url)
             thread = Thread(target=send, args=(url,))
             thread.start()
         return jsonify({"success": True})
@@ -34,7 +36,7 @@ def add_urls():
 @queue.post("/url")
 def add_url():
     try:
-        url = request.json.get("url")
+        url = url_prefixer(request.json.get("url"))
         thread = Thread(target=send, args=(url,))
         thread.start()
         return jsonify({"success": True})

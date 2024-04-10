@@ -19,3 +19,10 @@ def insert(url, summary, img_path, embedding, title):
 
 
 ### Other CRUD Operations will be added here ###
+
+# Helper function to ensure http(s) prefix
+def url_prefixer(url):
+    # Check URL includes http(s) - to ensure Playwright usability
+    if not url.startswith("http://") or not url.startswith("https://"):
+        url = "http://" + url
+    return url
