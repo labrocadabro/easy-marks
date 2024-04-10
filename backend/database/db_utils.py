@@ -18,9 +18,38 @@ def insert(url, summary, img_path, embedding, title):
     return inserted.inserted_id  # Returns Object ID
 
 
-### Other CRUD Operations will be added here ###
-
-
+# Get all bookmarks
 def get_all():
-    fields = {"_id": 1, "title": 1, "summary": 1, "screenshot": 1, "url": 1}
+    fields = {"_id": 1, "title": 1, "url": 1, "summary": 1, "screenshot": 1}
     return mongo.db.urls.find({}, fields)
+
+
+def get_search(query_vector):
+    # Define pipeline
+    pipeline = [
+        {
+            "$vectorSearch": {
+                "index": "vectorIndex",
+                "path": "vectorEmbeddings",
+                "queryVector": query_vector,
+                "numCandidates": 20,
+                "limit": 20,
+            }
+        },
+        {
+            "$project": {
+                "_id": 1,
+                "title": 1,
+                "url": 1,
+                "summary": 1,
+                "screenshot": 1,
+                "score": {
+                    # Include search score in result set
+                    "$meta": "vectorSearchScore"
+                },
+            }
+        },
+    ]
+
+    # Return search results
+    return mongo.db.urls.aggregate(pipeline)
