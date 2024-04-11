@@ -55,18 +55,18 @@ function BookmarksPage() {
 
 	const updateBookmarks = (deleted_id) => {
 		// Update bookmarks list after delete
-		setBookmarksList(bookmarksList.filter((bookmark) =>
-			bookmark.id !== deleted_id
-		));
+		setBookmarksList(
+			bookmarksList.filter((bookmark) => bookmark.id !== deleted_id)
+		);
 		// Set flag to update bookmarksList
 		setUpdateList(true);
-	}
+	};
 
 	return (
 		<>
 			<h1 className="text-2xl font-bold mb-4 text-center">View Bookmarks</h1>
 			<SearchBar onSearch={handleSearchStateChange} />
-			<div className="h-56 grid grid-cols-4 gap-5 content-start">
+			<div className="flex flex-wrap gap-5">
 				{bookmarksList?.length
 					? bookmarksList.map((bookmark) => (
 							<BookmarkCard
@@ -74,7 +74,7 @@ function BookmarksPage() {
 								data={bookmark}
 								notifyParent={updateBookmarks}
 							/>
-						))
+					  ))
 					: "No bookmarks yet"}
 			</div>
 		</>
