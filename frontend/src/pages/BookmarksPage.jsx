@@ -7,14 +7,15 @@ function BookmarksPage() {
 	const [bookmarksList, setBookmarksList] = useState(null);
 	const [searchState, setSearchState] = useState(null);
 	const [sendSearch, setSendSearch] = useState(false);
+	const [updateList, setUpdateList] = useState(false);
 
 	useEffect(() => {
-		if (!searchState) {
+		if (!searchState && !updateList) {
 			fetch(`${server}/bookmarks`)
 				.then((res) => res.json())
 				.then((data) => {
 					const bookmarks = JSON.parse(data).map((item) => ({
-						id: item._id._oid,
+						id: item.id,
 						url: item.url,
 						title: item.title,
 						description: item.summary,
@@ -34,7 +35,7 @@ function BookmarksPage() {
 				.then((res) => res.json())
 				.then((data) => {
 					const bookmarks = JSON.parse(data).map((item) => ({
-						id: item._id._oid,
+						id: item.id,
 						url: item.url,
 						title: item.title,
 						description: item.summary,
@@ -42,27 +43,38 @@ function BookmarksPage() {
 						score: item.score,
 					}));
 					setBookmarksList(bookmarks);
-					console.log("Booksmarks:", bookmarks);
 					setSendSearch(false);
 				})
 				.catch((e) => console.log(e));
 		}
-	}, [searchState, sendSearch]);
+	}, [searchState, sendSearch, updateList]);
 
 	const handleSearchStateChange = (value) => {
-		console.log("A search was submitted: " + value);
 		setSearchState(value);
 	};
+
+	const updateBookmarks = (deleted_id) => {
+		// Update bookmarks list after delete
+		setBookmarksList(bookmarksList.filter((bookmark) => 
+			bookmark.id !== deleted_id
+		));
+		// Set flag to update bookmarksList
+		setUpdateList(true);
+	}
 
 	return (
 		<>
 			<h1 className="text-2xl font-bold mb-4 text-center">View Bookmarks</h1>
 			<SearchBar onSearch={handleSearchStateChange} />
 			<div className="h-56 grid grid-cols-4 gap-5 content-start">
-				{bookmarksList
+				{bookmarksList?.length
 					? bookmarksList.map((bookmark) => (
-							<BookmarkCard key={bookmark.id} data={bookmark} />
-					  ))
+							<BookmarkCard
+								key={bookmark.id}
+								data={bookmark}
+								notifyParent={updateBookmarks}
+							/>
+						))
 					: "No bookmarks yet"}
 			</div>
 		</>
