@@ -16,7 +16,6 @@ function App() {
 
 	useEffect(() => {
 		const accessToken = window.sessionStorage.getItem("accessToken");
-		console.log(accessToken);
 		if (accessToken) {
 			fetch(`${server}/auth/session`, {
 				method: "POST",
