@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage";
 import BookmarksPage from "./pages/BookmarksPage";
 import AddBookmarkPage from "./pages/AddBookmarkPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import ProtectedRoutes from "./components/ProtectedRoute";
 
 function App() {
 	const [loggedIn, setLoggedIn] = useState(false);
@@ -27,9 +28,12 @@ function App() {
 					userId: window.sessionStorage.getItem("userId"),
 				}),
 			})
-				.then((res) => res.json())
+				.then((res) => {
+					if (!res.ok) throw new Error("Something went wrong");
+						return res.json();
+				})
 				.then((data) => {
-					if (data?.valid) {
+					if (data) {
 						setLoggedIn(true);
 						setPhoto(data.photo);
 						setFirstName(data.firstName);
@@ -39,6 +43,9 @@ function App() {
 						window.sessionStorage.removeItem("accessToken");
 						window.sessionStorage.removeItem("userId");
 					}
+				})
+				.catch((e) => {
+					console.log(e);
 				});
 		}
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -60,8 +67,11 @@ function App() {
 					<main className="px-8 py-6 h-full">
 						<Routes>
 							<Route path="/" element={<HomePage />} />
-							<Route path="/bookmarks" element={<BookmarksPage />} />
-							<Route path="/add" element={<AddBookmarkPage />} />
+							<Route element={<ProtectedRoutes />}>
+								<Route path="/bookmarks" element={<BookmarksPage />} />
+								<Route path="/add" element={<AddBookmarkPage />} />
+							</Route>
+
 							<Route path="*" element={<NotFoundPage />} />
 						</Routes>
 					</main>
