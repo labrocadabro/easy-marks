@@ -54,12 +54,6 @@ function BookmarksPage() {
 		setSearchState(value);
 	};
 
-	let bookmarkCardsList = [];
-
-	for (const i of bookmarksList) {
-		bookmarkCardsList.push(<BookmarkCard key={i.key} data={i} />);
-	}
-
 	return (
 		<>
 			<h1 className="text-2xl font-bold mb-4 text-center">View Bookmarks</h1>
