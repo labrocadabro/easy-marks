@@ -25,11 +25,15 @@ function BulkAdd() {
 			// Create form data to transmit file
 			let data = new FormData();
 			data.append("file", file);
+			data.append("userId", window.sessionStorage.getItem("userId"));
 
 			// Send file to server in POST request
 			fetch(`${server}/api/urls`, {
 				method: "POST",
 				body: data,
+				headers: {
+					Authorization: `${window.sessionStorage.getItem("accessToken")}`,
+				},
 			})
 				.then((response) => response.json())
 				.then((data) => {

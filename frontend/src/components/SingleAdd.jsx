@@ -24,9 +24,13 @@ function SingleAdd() {
 			fetch(`${server}/api/url`, {
 				method: "POST",
 				headers: {
+					Authorization: `${window.sessionStorage.getItem("accessToken")}`,
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ url: url }),
+				body: JSON.stringify({
+					url: url,
+					userId: window.sessionStorage.getItem("userId"),
+				}),
 			})
 				.then((response) => response.json())
 				.then((data) => {

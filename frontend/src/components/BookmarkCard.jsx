@@ -20,8 +20,12 @@ function BookmarkCard({ data, notifyParent }) {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
+				Authorization: `${window.sessionStorage.getItem("accessToken")}`,
 			},
-			body: JSON.stringify({ id: id }),
+			body: JSON.stringify({
+				id: id,
+				userId: window.sessionStorage.getItem("userId"),
+			}),
 		})
 			.then((res) => res.json())
 			.then((data) => {

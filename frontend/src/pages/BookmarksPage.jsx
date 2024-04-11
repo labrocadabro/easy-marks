@@ -7,7 +7,14 @@ function BookmarksPage() {
 	const [bookmarksList, setBookmarksList] = useState([]);
 
 	useEffect(() => {
-		fetch(`${server}/api/bookmarks`)
+		fetch(
+			`${server}/api/user/${window.sessionStorage.getItem("userId")}/bookmarks`,
+			{
+				headers: {
+					Authorization: `${window.sessionStorage.getItem("accessToken")}`,
+				},
+			}
+		)
 			.then((res) => res.json())
 			.then((data) => {
 				const bookmarks = JSON.parse(data).map((item) => ({
@@ -27,8 +34,12 @@ function BookmarksPage() {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
+				Authorization: `${window.sessionStorage.getItem("accessToken")}`,
 			},
-			body: JSON.stringify({ search: value }),
+			body: JSON.stringify({
+				search: value,
+				userId: window.sessionStorage.getItem("userId"),
+			}),
 		})
 			.then((res) => res.json())
 			.then((data) => {

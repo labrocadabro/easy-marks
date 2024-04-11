@@ -1,43 +1,64 @@
 """Database Endpoints"""
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, Response
 from bson.json_util import dumps
 from backend.embed import embed
-from .db_utils import insert, delete, get_all, get_search
+from .db_utils import delete, get_all, get_search
+from backend.auth.auth_utils import valid_session
+import traceback
 
 db = Blueprint("db", __name__)
 
 
 @db.post("/search")
 def search_bookmarks():
-    search_criteria = request.json["search"]
-    search_embedding = embed(search_criteria)
-    bookmarks = get_search(search_embedding)
-    return jsonify(dumps(bookmarks))
+    try:
+        # this will throw an error if the session isn't valid
+        valid_session(request)
+        user_id = request.json.get("userId")
+        search_criteria = request.json["search"]
+        search_embedding = embed(search_criteria)
+        bookmarks = get_search(search_embedding, user_id)
+        return jsonify(dumps(bookmarks))
+    except Exception as e:
+        print(traceback.format_exc())
+        return Response(status=500)
 
 
-@db.route("/api/bookmarks")
-def get_all_bookmarks():
-    bookmarks = get_all()
-    return jsonify(dumps(bookmarks))
+@db.route("/api/user/<user_id>/bookmarks")
+def get_all_bookmarks(user_id):
+    try:
+        # this will throw an error if the session isn't valid
+        valid_session(request, user_id)
+        bookmarks = get_all(user_id)
+        return jsonify(dumps(bookmarks))
+    except Exception:
+        print(traceback.format_exc())
+        return Response(status=500)
 
 
 # TODO: Make this endpoint
 @db.patch("/api/bookmark")
 def update_bookmark():
     try:
-        return jsonify({"updated": True})
+        # this will throw an error if the session isn't valid
+        valid_session(request)
+        user_id = request.json.get("userId")
+        return jsonify({"success": True})
     except Exception as e:
         print(e)
-        return jsonify({"updated": False})
+        return jsonify({"success": False})
 
 
 @db.delete("/api/bookmark")
 def delete_bookmark():
     try:
+        # this will throw an error if the session isn't valid
+        valid_session(request)
+        user_id = request.json.get("userId")
         bookmark_id = request.json["id"]
-        deleted = delete(bookmark_id)
-        return jsonify({"deleted": True})
+        delete(bookmark_id, user_id)
+        return jsonify({"success": True})
     except Exception as e:
         print(e)
-        return jsonify({"deleted": False})
+        return jsonify({"success": False})
