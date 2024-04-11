@@ -1,5 +1,6 @@
 import { Card, Button, Flowbite } from 'flowbite-react';
 import { HiTrash } from "react-icons/hi";
+import { server } from "../config/server";
 
 // Custom theme to style delete button
 const customTheme = {
@@ -11,10 +12,23 @@ const customTheme = {
 	},
 };
 
-function BookmarkCard( { data } ) {
+function BookmarkCard( { data, notify } ) {
 
 	const handleClick = (e) => {
-		console.log("Bookmark with id " + e.target.id + " was clicked")
+		fetch(`${server}/delete`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ id: e.target.id })
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				console.log("Data from card:", data);
+				// Notify parent component
+				notify(e.target.id);
+			})
+			.catch((e) => console.log(e));
 	}
 
   return (
@@ -22,7 +36,6 @@ function BookmarkCard( { data } ) {
 		className="max-w-sm space-x-1 space-y-1"
 		imgAlt="Meaningful alt text for the image"
 		imgSrc={data.image}
-
 		>
 			<a href={data.url} target='_blank'>
 				<h5 className="text-2xl font-bold tracking-tight text-gray-600 dark:text-white">

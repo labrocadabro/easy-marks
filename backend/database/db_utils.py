@@ -1,5 +1,6 @@
 """Database CRUD Ops/Utils"""
 
+from bson import ObjectId
 from backend import mongo
 
 
@@ -17,13 +18,29 @@ def insert(url, summary, img_path, embedding, title):
     inserted = mongo.db["urls"].insert_one(record)
     return inserted.inserted_id  # Returns Object ID
 
+# Delete bookmark
+def delete(id):
+    # Delete bookmark by ID
+    return mongo.db.urls.delete_one({"_id": ObjectId(id)})
 
 # Get all bookmarks
 def get_all():
-    fields = {"_id": 1, "title": 1, "url": 1, "summary": 1, "screenshot": 1}
-    return mongo.db.urls.find({}, fields)
+    # Pipeline to convert ObjectID to string for use in frontend
+    pipeline = [
+        {
+            '$project': {
+                "id": {'$toString': "$_id"},
+                "_id": 0,
+                "title": 1,
+                "url": 1,
+                "summary": 1,
+                "screenshot": 1
+            }
+        }
+    ]
+    return mongo.db.urls.aggregate(pipeline)
 
-
+# Search bookmarks using vector embeddings (similarity search)
 def get_search(query_vector):
     # Define pipeline
     pipeline = [
@@ -38,7 +55,8 @@ def get_search(query_vector):
         },
         {
             "$project": {
-                "_id": 1,
+                "id": {'$toString': "$_id"},
+                "_id": 0,
                 "title": 1,
                 "url": 1,
                 "summary": 1,
@@ -46,9 +64,9 @@ def get_search(query_vector):
                 "score": {
                     # Include search score in result set
                     "$meta": "vectorSearchScore"
-                },
+                }
             }
-        },
+        }
     ]
 
     # Return search results
@@ -57,6 +75,6 @@ def get_search(query_vector):
 # Helper function to ensure http(s) prefix
 def url_prefixer(url):
     # Check URL includes http(s) - to ensure Playwright usability
-    if not url.startswith("http://") or not url.startswith("https://"):
+    if not url.startswith("http://") and not url.startswith("https://"):
         url = "http://" + url
     return url

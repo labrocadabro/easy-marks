@@ -3,7 +3,7 @@
 from flask import Blueprint, request, jsonify
 from bson.json_util import dumps
 from backend.embed import embed
-from .db_utils import insert, get_all, get_search
+from .db_utils import insert, delete, get_all, get_search
 
 db = Blueprint("db", __name__)
 
@@ -20,3 +20,10 @@ def search_bookmarks():
 def get_all_bookmarks():
     bookmarks = get_all()
     return jsonify(dumps(bookmarks))
+
+
+@db.post("/delete")
+def delete_bookmark():
+    bookmark_id = request.json["id"]
+    deleted = delete(bookmark_id)
+    return jsonify({"deleted": deleted.deleted_count})
