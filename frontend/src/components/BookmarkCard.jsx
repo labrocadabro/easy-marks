@@ -12,21 +12,23 @@ const customTheme = {
 	},
 };
 
-function BookmarkCard( { data, notify } ) {
+function BookmarkCard( { data, notifyParent } ) {
 
 	const handleClick = (e) => {
+		const id = e.currentTarget.id;
+	
 		fetch(`${server}/delete`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ id: e.target.id })
+			body: JSON.stringify({ id: id })
 		})
 			.then((res) => res.json())
 			.then((data) => {
-				console.log("Data from card:", data);
+				console.log(data);
 				// Notify parent component
-				notify(e.target.id);
+				notifyParent(id);
 			})
 			.catch((e) => console.log(e));
 	}

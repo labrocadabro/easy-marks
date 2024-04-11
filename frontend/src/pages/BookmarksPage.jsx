@@ -50,7 +50,6 @@ function BookmarksPage() {
 	}, [searchState, sendSearch, updateList]);
 
 	const handleSearchStateChange = (value) => {
-		console.log("A search was submitted: " + value);
 		setSearchState(value);
 	};
 
@@ -59,6 +58,7 @@ function BookmarksPage() {
 		setBookmarksList(bookmarksList.filter((bookmark) => 
 			bookmark.id !== deleted_id
 		));
+		// Set flag to update bookmarksList
 		setUpdateList(true);
 	}
 
@@ -72,7 +72,7 @@ function BookmarksPage() {
 							<BookmarkCard
 								key={bookmark.id}
 								data={bookmark}
-								notify={updateBookmarks}
+								notifyParent={updateBookmarks}
 							/>
 						))
 					: "No bookmarks yet"}

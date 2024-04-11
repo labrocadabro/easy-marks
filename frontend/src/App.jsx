@@ -66,7 +66,7 @@ function App() {
 							<Route path="*" element={<NotFoundPage />} />
 						</Routes>
 					</main>
-					{/* <Footer /> */}
+					<Footer />
 				</div>
 			</UserContext.Provider>
 		</>
