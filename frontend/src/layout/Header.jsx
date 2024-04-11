@@ -4,10 +4,12 @@ import { UserContext } from "../context/UserContext";
 import { Link } from "react-router-dom";
 import { server } from "../config/server";
 import { Avatar, Dropdown } from "flowbite-react";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
 	const [loggedIn, setLoggedIn, photo, setPhoto, firstName, setFirstName] =
 		useContext(UserContext);
+	const navigate = useNavigate();
 
 	const login = useGoogleLogin({
 		flow: "auth-code",
@@ -19,15 +21,22 @@ function Header() {
 				},
 				body: JSON.stringify({ code: response.code }),
 			})
-				.then((res) => res.json())
+				.then((res) => {
+					if (!res.ok) throw new Error("Something went wrong");
+					return res.json();
+				})
 				.then((data) => {
-					if (data?.success) {
+					if (data) {
 						setLoggedIn(true);
 						setPhoto(data.photo);
 						setFirstName(data.firstName);
 						window.sessionStorage.setItem("accessToken", data.accessToken);
 						window.sessionStorage.setItem("userId", data.userId);
+						navigate("/bookmarks");
 					}
+				})
+				.catch((e) => {
+					console.log(e);
 				});
 		},
 		onError: (errorResponse) => {
@@ -52,16 +61,20 @@ function Header() {
 							Home
 						</Link>
 					</li>
-					<li>
-						<Link to="/bookmarks" className="nav-link">
-							View Bookmarks
-						</Link>
-					</li>
-					<li>
-						<Link to="/add" className="nav-link">
-							Add New Bookmark
-						</Link>
-					</li>
+					{loggedIn && (
+						<li>
+							<Link to="/bookmarks" className="nav-link">
+								View Bookmarks
+							</Link>
+						</li>
+					)}
+					{loggedIn && (
+						<li>
+							<Link to="/add" className="nav-link">
+								Add New Bookmark
+							</Link>
+						</li>
+					)}
 				</ul>
 			</nav>
 			{loggedIn ? (
@@ -74,9 +87,12 @@ function Header() {
 						<Dropdown.Header>
 							<span className="block text-sm">Logged in as {firstName}</span>
 						</Dropdown.Header>
-						<Dropdown.Item>Dashboard</Dropdown.Item>
-						<Dropdown.Item>Settings</Dropdown.Item>
-						<Dropdown.Divider />
+						<Dropdown.Item>
+							{" "}
+							<Link to="/bookmarks">View Bookmarks</Link>
+						</Dropdown.Item>
+						{/* <Dropdown.Item>Settings</Dropdown.Item> */}
+						{/* <Dropdown.Divider /> */}
 						<Dropdown.Item onClick={logOut}>Sign out</Dropdown.Item>
 					</Dropdown>
 				</>

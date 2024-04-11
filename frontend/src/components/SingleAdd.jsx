@@ -32,14 +32,13 @@ function SingleAdd() {
 					userId: window.sessionStorage.getItem("userId"),
 				}),
 			})
-				.then((response) => response.json())
-				.then((data) => {
-					console.log("Success:", data);
-					// Reset flags after 3 seconds if toast not dismissed
+				.then((res) => {
+					if (!res.ok) throw new Error("Something went wrong");
+					// Reset flags after 2 seconds if toast not dismissed
 					const timer = setTimeout(() => {
 						setSubmitted(false);
 						setValidUrl(false);
-					}, 3000);
+					}, 2000);
 					return () => clearTimeout(timer);
 				})
 				.catch((error) => {

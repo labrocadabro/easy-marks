@@ -85,7 +85,6 @@ def valid_session(request, user_id=None):
         )
     else:
         return {
-            "valid": True,
             "photo": profile_data.get("picture"),
             "firstName": profile_data.get("given_name"),
             "accessToken": access_token,

@@ -27,7 +27,10 @@ function BookmarkCard({ data, notifyParent }) {
 				userId: window.sessionStorage.getItem("userId"),
 			}),
 		})
-			.then((res) => res.json())
+			.then((res) => {
+				if (!res.ok) throw new Error("Something went wrong");
+				return res.json();
+			})
 			.then((data) => {
 				console.log(data);
 				// Notify parent component

@@ -15,7 +15,10 @@ function BookmarksPage() {
 				},
 			}
 		)
-			.then((res) => res.json())
+			.then((res) => {
+				if (!res.ok) throw new Error("Something went wrong");
+				return res.json();
+			})
 			.then((data) => {
 				const bookmarks = JSON.parse(data).map((item) => ({
 					id: item.id,
@@ -41,7 +44,10 @@ function BookmarksPage() {
 				userId: window.sessionStorage.getItem("userId"),
 			}),
 		})
-			.then((res) => res.json())
+			.then((res) => {
+				if (!res.ok) throw new Error("Something went wrong");
+				return res.json();
+			})
 			.then((data) => {
 				const bookmarks = JSON.parse(data).map((item) => ({
 					id: item.id,

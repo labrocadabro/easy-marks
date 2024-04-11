@@ -20,7 +20,7 @@ def search_bookmarks():
         search_embedding = embed(search_criteria)
         bookmarks = get_search(search_embedding, user_id)
         return jsonify(dumps(bookmarks))
-    except Exception as e:
+    except:
         print(traceback.format_exc())
         return Response(status=500)
 
@@ -44,10 +44,10 @@ def update_bookmark():
         # this will throw an error if the session isn't valid
         valid_session(request)
         user_id = request.json.get("userId")
-        return jsonify({"success": True})
-    except Exception as e:
-        print(e)
-        return jsonify({"success": False})
+        return Response(status=200)
+    except:
+        print(traceback.format_exc())
+        return Response(status=500)
 
 
 @db.delete("/api/bookmark")
@@ -58,7 +58,7 @@ def delete_bookmark():
         user_id = request.json.get("userId")
         bookmark_id = request.json["id"]
         delete(bookmark_id, user_id)
-        return jsonify({"success": True})
-    except Exception as e:
-        print(e)
-        return jsonify({"success": False})
+        return Response(status=200)
+    except:
+        print(traceback.format_exc())
+        return Response(status=500)

@@ -1,9 +1,10 @@
 """ Message queue (send) """
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, Response
 from threading import Thread
 from backend.database.db_utils import url_prefixer
 from backend.auth.auth_utils import valid_session
+import traceback
 
 # from pymongo import ReturnDocument
 # from backend import mongo
@@ -32,9 +33,10 @@ def add_urls():
             url = url_prefixer(url)
             thread = Thread(target=send, args=(url, user_id))
             thread.start()
-        return jsonify({"success": True})
+        return Response(status=200)
     except:
-        return jsonify({"success": False, "message": "No file found in request"})
+        print(traceback.format_exc())
+        return Response(status=500)
 
 
 @queue.post("/api/url")
@@ -46,7 +48,7 @@ def add_url():
         url = url_prefixer(request.json.get("url"))
         thread = Thread(target=send, args=(url, user_id))
         thread.start()
-        return jsonify({"success": True})
-    except Exception as e:
-        print(e)
-        return jsonify({"success": False})
+        return Response(status=200)
+    except:
+        print(traceback.format_exc())
+        return Response(status=500)
