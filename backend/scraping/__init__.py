@@ -6,6 +6,19 @@ from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 from pathlib import Path
 import os
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from dotenv import load_dotenv
+import time
+
+load_dotenv()
+
+config = cloudinary.config(
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+)
 
 
 # function to return website title, text and save screenshot
@@ -30,6 +43,10 @@ def get_website_data(url):
             Path(__file__).parent.parent.parent / f"frontend/public/{imgName}.png"
         )
         page.screenshot(path=screenshot_path)
+        result = cloudinary.uploader.upload(
+            screenshot_path, unique_filename=True, overwrite=False
+        )
+
         browser.close()
 
     # use beautiful soup to parse html content
@@ -51,4 +68,4 @@ def get_website_data(url):
     # summarize takes a list and limit the document to 4000char (brute force)
     clean_text = [clean_text[:4000]]
 
-    return (title, clean_text, screenshot_path)
+    return (title, clean_text, result["secure_url"])
