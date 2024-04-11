@@ -3,7 +3,8 @@ function Footer() {
 		<footer className="content-center bottom-0 w-full bg-slate-100 px-4 py-4">
 			<p>
 				Made with <p className="line-through">Love</p> panic, aggravation, and a
-				dash of confusion, 3 bottles of vodka, frustration and, apparently, pain
+				dash of confusion, 3 bottles of vodka, frustration and, apparently,
+				pain.
 			</p>
 			<svg
 				className="content-center text-red-400 w-5 h-auto fill-current"

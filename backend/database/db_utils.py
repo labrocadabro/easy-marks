@@ -21,9 +21,9 @@ def insert(user_id, url, summary, img_path, embedding, title):
 
 
 # Delete bookmark
-def delete(id, user_id):
+def delete(bookmark_id, user_id):
     # Delete bookmark by ID
-    return mongo.db.urls.delete_one({"_id": ObjectId(id), "user_id": user_id})
+    return mongo.db.urls.delete_one({"_id": ObjectId(bookmark_id), "user_id": user_id})
 
 
 # Get all bookmarks

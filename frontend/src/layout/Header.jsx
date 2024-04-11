@@ -91,8 +91,6 @@ function Header() {
 							{" "}
 							<Link to="/bookmarks">View Bookmarks</Link>
 						</Dropdown.Item>
-						{/* <Dropdown.Item>Settings</Dropdown.Item> */}
-						{/* <Dropdown.Divider /> */}
 						<Dropdown.Item onClick={logOut}>Sign out</Dropdown.Item>
 					</Dropdown>
 				</>
