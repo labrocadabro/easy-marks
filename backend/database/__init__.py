@@ -16,7 +16,7 @@ def search_bookmarks():
     return jsonify(dumps(bookmarks))
 
 
-@db.route("/bookmarks")
+@db.route("/get-bookmarks")
 def get_all_bookmarks():
     bookmarks = get_all()
     return jsonify(dumps(bookmarks))
