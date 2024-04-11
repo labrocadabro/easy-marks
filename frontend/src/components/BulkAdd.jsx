@@ -37,10 +37,6 @@ function BulkAdd() {
 			})
 				.then((res) => {
 					if (!res.ok) throw new Error("Something went wrong");
-					return res.json();
-				})
-				.then((data) => {
-					console.log("Success:", data);
 					// Reset flags after 3 seconds if toast not dismissed
 					const timer = setTimeout(() => {
 						setSubmitted(false);
