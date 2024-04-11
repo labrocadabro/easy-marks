@@ -29,11 +29,6 @@ function BookmarkCard({ data, notifyParent }) {
 		})
 			.then((res) => {
 				if (!res.ok) throw new Error("Something went wrong");
-				return res.json();
-			})
-			.then((data) => {
-				console.log(data);
-				// Notify parent component
 				notifyParent(id);
 			})
 			.catch((e) => console.log(e));
