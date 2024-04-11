@@ -53,3 +53,10 @@ def get_search(query_vector):
 
     # Return search results
     return mongo.db.urls.aggregate(pipeline)
+
+# Helper function to ensure http(s) prefix
+def url_prefixer(url):
+    # Check URL includes http(s) - to ensure Playwright usability
+    if not url.startswith("http://") or not url.startswith("https://"):
+        url = "http://" + url
+    return url
