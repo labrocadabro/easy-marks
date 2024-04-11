@@ -11,7 +11,7 @@ function BookmarksPage() {
 
 	useEffect(() => {
 		if (!searchState && !updateList) {
-			fetch(`${server}/bookmarks`)
+			fetch(`${server}/api/bookmarks`)
 				.then((res) => res.json())
 				.then((data) => {
 					const bookmarks = JSON.parse(data).map((item) => ({
@@ -55,7 +55,7 @@ function BookmarksPage() {
 
 	const updateBookmarks = (deleted_id) => {
 		// Update bookmarks list after delete
-		setBookmarksList(bookmarksList.filter((bookmark) => 
+		setBookmarksList(bookmarksList.filter((bookmark) =>
 			bookmark.id !== deleted_id
 		));
 		// Set flag to update bookmarksList

@@ -16,14 +16,28 @@ def search_bookmarks():
     return jsonify(dumps(bookmarks))
 
 
-@db.route("/get-bookmarks")
+@db.route("/api/bookmarks")
 def get_all_bookmarks():
     bookmarks = get_all()
     return jsonify(dumps(bookmarks))
 
 
-@db.post("/delete")
+# TODO: Make this endpoint
+@db.patch("/api/bookmark")
+def update_bookmark():
+    try:
+        return jsonify({"updated": True})
+    except Exception as e:
+        print(e)
+        return jsonify({"updated": False})
+
+
+@db.delete("/api/bookmark")
 def delete_bookmark():
-    bookmark_id = request.json["id"]
-    deleted = delete(bookmark_id)
-    return jsonify({"deleted": deleted.deleted_count})
+    try:
+        bookmark_id = request.json["id"]
+        deleted = delete(bookmark_id)
+        return jsonify({"deleted": True})
+    except Exception as e:
+        print(e)
+        return jsonify({"deleted": False})

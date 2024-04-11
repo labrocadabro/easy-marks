@@ -21,7 +21,7 @@ function SingleAdd() {
 	useEffect(() => {
 		if (validUrl) {
 			// Send POST request to backend if URL is valid
-			fetch(`${server}/url`, {
+			fetch(`${server}/api/url`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

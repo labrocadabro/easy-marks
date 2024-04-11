@@ -12,7 +12,7 @@ function Header() {
 	const login = useGoogleLogin({
 		flow: "auth-code",
 		onSuccess: (response) => {
-			fetch(`${server}/login`, {
+			fetch(`${server}/auth/login`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

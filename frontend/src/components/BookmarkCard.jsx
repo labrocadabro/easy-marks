@@ -16,9 +16,9 @@ function BookmarkCard( { data, notifyParent } ) {
 
 	const handleClick = (e) => {
 		const id = e.currentTarget.id;
-	
-		fetch(`${server}/delete`, {
-			method: "POST",
+
+		fetch(`${server}/api/bookmark`, {
+			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
 			},
@@ -34,7 +34,7 @@ function BookmarkCard( { data, notifyParent } ) {
 	}
 
   return (
-		<Card 
+		<Card
 		className="max-w-sm space-x-1 space-y-1"
 		imgAlt="Meaningful alt text for the image"
 		imgSrc={data.image}

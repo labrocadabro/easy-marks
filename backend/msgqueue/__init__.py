@@ -11,7 +11,7 @@ from .queue_utils import send
 queue = Blueprint("queue", __name__)
 
 
-@queue.post("/urls")
+@queue.post("/api/urls")
 def add_urls():
     try:
         # process file to get URLs
@@ -33,7 +33,7 @@ def add_urls():
         return jsonify({"success": False, "message": "No file found in request"})
 
 
-@queue.post("/url")
+@queue.post("/api/url")
 def add_url():
     try:
         url = url_prefixer(request.json.get("url"))

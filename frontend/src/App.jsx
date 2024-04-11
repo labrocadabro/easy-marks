@@ -18,7 +18,7 @@ function App() {
 		const accessToken = window.sessionStorage.getItem("accessToken");
 		console.log(accessToken);
 		if (accessToken) {
-			fetch(`${server}/session`, {
+			fetch(`${server}/auth/session`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

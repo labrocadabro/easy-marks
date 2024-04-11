@@ -8,7 +8,7 @@ from .auth_utils import get_tokens, get_profile_data, valid_session
 auth = Blueprint("auth", __name__)
 
 
-@auth.post("/login")
+@auth.post("/auth/login")
 def login():
     try:
         authorization_code = request.get_json().get("code")
@@ -57,7 +57,7 @@ def login():
         return jsonify({"success": False})
 
 
-@auth.post("/session")
+@auth.post("/auth/session")
 def check_session():
     try:
         return jsonify(valid_session(request))
