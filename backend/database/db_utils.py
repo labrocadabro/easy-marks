@@ -28,27 +28,27 @@ def get_search(query_vector):
     # Define pipeline
     pipeline = [
         {
-            '$vectorSearch': {
-                'index': 'vectorIndex', 
-                'path': 'vectorEmbeddings', 
-                'queryVector': query_vector, 
-                'numCandidates': 20, 
-                'limit': 20
+            "$vectorSearch": {
+                "index": "vectorIndex",
+                "path": "vectorEmbeddings",
+                "queryVector": query_vector,
+                "numCandidates": 20,
+                "limit": 20,
             }
         },
         {
-            '$project': {
-            '_id': 1,
-            'title': 1,
-            'url': 1,
-            'summary': 1,
-            'screenshot': 1,
-            'score': {
-                # Include search score in result set
-                '$meta': 'vectorSearchScore'
-                }
+            "$project": {
+                "_id": 1,
+                "title": 1,
+                "url": 1,
+                "summary": 1,
+                "screenshot": 1,
+                "score": {
+                    # Include search score in result set
+                    "$meta": "vectorSearchScore"
+                },
             }
-        }
+        },
     ]
 
     # Return search results

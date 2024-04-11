@@ -18,16 +18,15 @@ def insert_url():
 
     return jsonify({"inserted_id": str(inserted_id)})
 
-
-@db.route("/bookmarks", methods=["GET"])
-def get_all_bookmarks():
-    bookmarks = get_all()
-    return jsonify(dumps(bookmarks))
-
-
 @db.post("/search")
 def search_bookmarks():
     search_criteria = request.json["search"]
     search_embedding = embed(search_criteria)
     bookmarks = get_search(search_embedding)
+    return jsonify(dumps(bookmarks))
+
+
+@db.route("/bookmarks")
+def get_all_bookmarks():
+    bookmarks = get_all()
     return jsonify(dumps(bookmarks))
