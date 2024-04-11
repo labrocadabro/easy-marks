@@ -65,9 +65,10 @@ def get_profile_data(access_token, refresh=False, refresh_token=None):
     return profile_response.json()
 
 
-def valid_session(request):
+def valid_session(request, user_id=None):
     access_token = request.headers.get("Authorization")
-    user_id = request.get_json().get("userId")
+    if not user_id:
+        user_id = request.get_json().get("userId")
     user_data = mongo.db["user"].find_one({"_id": ObjectId(user_id)})
 
     if not user_data:
@@ -84,7 +85,6 @@ def valid_session(request):
         )
     else:
         return {
-            "valid": True,
             "photo": profile_data.get("picture"),
             "firstName": profile_data.get("given_name"),
             "accessToken": access_token,

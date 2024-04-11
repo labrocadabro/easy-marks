@@ -5,9 +5,10 @@ from backend import mongo
 
 
 # Insert bookmark
-def insert(url, summary, img_path, embedding, title):
+def insert(user_id, url, summary, img_path, embedding, title):
     # Create dictionary/object to serve as record
     record = {
+        "user_id": user_id,
         "url": url,
         "title": title,
         "summary": summary,
@@ -18,30 +19,34 @@ def insert(url, summary, img_path, embedding, title):
     inserted = mongo.db["urls"].insert_one(record)
     return inserted.inserted_id  # Returns Object ID
 
+
 # Delete bookmark
-def delete(id):
+def delete(bookmark_id, user_id):
     # Delete bookmark by ID
-    return mongo.db.urls.delete_one({"_id": ObjectId(id)})
+    return mongo.db.urls.delete_one({"_id": ObjectId(bookmark_id), "user_id": user_id})
+
 
 # Get all bookmarks
-def get_all():
+def get_all(user_id):
     # Pipeline to convert ObjectID to string for use in frontend
     pipeline = [
+        {"$match": {"user_id": user_id}},
         {
-            '$project': {
-                "id": {'$toString': "$_id"},
+            "$project": {
+                "id": {"$toString": "$_id"},
                 "_id": 0,
                 "title": 1,
                 "url": 1,
                 "summary": 1,
-                "screenshot": 1
-            }
-        }
+                "screenshot": 1,
+            },
+        },
     ]
     return mongo.db.urls.aggregate(pipeline)
 
+
 # Search bookmarks using vector embeddings (similarity search)
-def get_search(query_vector):
+def get_search(query_vector, user_id):
     # Define pipeline
     pipeline = [
         {
@@ -51,11 +56,12 @@ def get_search(query_vector):
                 "queryVector": query_vector,
                 "numCandidates": 20,
                 "limit": 20,
-            }
+                "filter": {"user_id": {"$eq": user_id}},
+            },
         },
         {
             "$project": {
-                "id": {'$toString': "$_id"},
+                "id": {"$toString": "$_id"},
                 "_id": 0,
                 "title": 1,
                 "url": 1,
@@ -64,13 +70,14 @@ def get_search(query_vector):
                 "score": {
                     # Include search score in result set
                     "$meta": "vectorSearchScore"
-                }
+                },
             }
-        }
+        },
     ]
 
     # Return search results
     return mongo.db.urls.aggregate(pipeline)
+
 
 # Helper function to ensure http(s) prefix
 def url_prefixer(url):

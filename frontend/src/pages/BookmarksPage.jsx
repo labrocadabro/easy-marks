@@ -4,77 +4,84 @@ import SearchBar from "../components/SearchBar";
 import { server } from "../config/server";
 
 function BookmarksPage() {
-	const [bookmarksList, setBookmarksList] = useState(null);
-	const [searchState, setSearchState] = useState(null);
-	const [sendSearch, setSendSearch] = useState(false);
-	const [updateList, setUpdateList] = useState(false);
+	const [bookmarksList, setBookmarksList] = useState([]);
 
 	useEffect(() => {
-		if (!searchState && !updateList) {
-			fetch(`${server}/bookmarks`)
-				.then((res) => res.json())
-				.then((data) => {
-					const bookmarks = JSON.parse(data).map((item) => ({
-						id: item.id,
-						url: item.url,
-						title: item.title,
-						description: item.summary,
-						image: item.screenshot,
-					}));
-					setBookmarksList(bookmarks);
-				})
-				.catch((e) => console.log(e));
-		} else if (sendSearch) {
-			fetch(`${server}/search`, {
-				method: "POST",
+		fetch(
+			`${server}/api/user/${window.sessionStorage.getItem("userId")}/bookmarks`,
+			{
 				headers: {
-					"Content-Type": "application/json",
+					Authorization: `${window.sessionStorage.getItem("accessToken")}`,
 				},
-				body: JSON.stringify({ search: searchState }),
+			}
+		)
+			.then((res) => {
+				if (!res.ok) throw new Error("Something went wrong");
+				return res.json();
 			})
-				.then((res) => res.json())
-				.then((data) => {
-					const bookmarks = JSON.parse(data).map((item) => ({
-						id: item.id,
-						url: item.url,
-						title: item.title,
-						description: item.summary,
-						image: item.screenshot,
-						score: item.score,
-					}));
-					setBookmarksList(bookmarks);
-					setSendSearch(false);
-				})
-				.catch((e) => console.log(e));
-		}
-	}, [searchState, sendSearch, updateList]);
+			.then((data) => {
+				const bookmarks = JSON.parse(data).map((item) => ({
+					id: item.id,
+					url: item.url,
+					title: item.title,
+					description: item.summary,
+					image: item.screenshot,
+				}));
+				setBookmarksList(bookmarks);
+			})
+			.catch((e) => console.log(e));
+	}, []);
 
-	const handleSearchStateChange = (value) => {
-		setSearchState(value);
-	};
+	function search(value) {
+		fetch(`${server}/search`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `${window.sessionStorage.getItem("accessToken")}`,
+			},
+			body: JSON.stringify({
+				search: value,
+				userId: window.sessionStorage.getItem("userId"),
+			}),
+		})
+			.then((res) => {
+				if (!res.ok) throw new Error("Something went wrong");
+				return res.json();
+			})
+			.then((data) => {
+				const bookmarks = JSON.parse(data).map((item) => ({
+					id: item.id,
+					url: item.url,
+					title: item.title,
+					description: item.summary,
+					image: item.screenshot,
+					score: item.score,
+				}));
+				setBookmarksList(bookmarks);
+			})
+			.catch((e) => console.log(e));
+	}
 
 	const updateBookmarks = (deleted_id) => {
 		// Update bookmarks list after delete
-		setBookmarksList(bookmarksList.filter((bookmark) => 
-			bookmark.id !== deleted_id
-		));
-		// Set flag to update bookmarksList
-		setUpdateList(true);
-	}
+		setBookmarksList(
+			bookmarksList.filter((bookmark) => bookmark.id !== deleted_id)
+		);
+	};
 
 	return (
 		<>
 			<h1 className="text-2xl font-bold mb-4 text-center">View Bookmarks</h1>
-			<SearchBar onSearch={handleSearchStateChange} />
-			<div className="h-56 grid grid-cols-4 gap-5 content-start">
-				{bookmarksList?.length
+			<SearchBar onSearch={search} />
+			<div className="flex flex-wrap gap-5 justify-center">
+				{bookmarksList.length
 					? bookmarksList.map((bookmark) => (
 							<BookmarkCard
 								key={bookmark.id}
 								data={bookmark}
 								notifyParent={updateBookmarks}
 							/>
-						))
+					  ))
 					: "No bookmarks yet"}
 			</div>
 		</>

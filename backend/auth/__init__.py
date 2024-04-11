@@ -1,14 +1,15 @@
 """Auth Endpoints"""
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, Response
 from pymongo import ReturnDocument
 from backend import mongo
 from .auth_utils import get_tokens, get_profile_data, valid_session
+import traceback
 
 auth = Blueprint("auth", __name__)
 
 
-@auth.post("/login")
+@auth.post("/auth/login")
 def login():
     try:
         authorization_code = request.get_json().get("code")
@@ -42,25 +43,24 @@ def login():
             user_data["google_id"] = profile_data.get("sub")
             user_result = mongo.db["user"].insert_one(user_data)
             user_id = user_result.inserted_id
-
+        print(user_id, access_token, profile_data)
         return jsonify(
             {
-                "success": True,
                 "userId": str(user_id),
                 "accessToken": access_token,
                 "photo": profile_data.get("picture"),
                 "firstName": profile_data.get("given_name"),
             }
         )
-    except Exception as e:
-        print(e)
-        return jsonify({"success": False})
+    except:
+        print(traceback.format_exc())
+        return Response(status=500)
 
 
-@auth.post("/session")
+@auth.post("/auth/session")
 def check_session():
     try:
         return jsonify(valid_session(request))
-    except Exception as e:
-        print(e)
-        return jsonify({"valid": False})
+    except:
+        print(traceback.format_exc())
+        return Response(status=500)

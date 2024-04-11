@@ -1,4 +1,4 @@
-import { Card, Button, Flowbite } from 'flowbite-react';
+import { Card, Button, Flowbite } from "flowbite-react";
 import { HiTrash } from "react-icons/hi";
 import { server } from "../config/server";
 
@@ -12,39 +12,40 @@ const customTheme = {
 	},
 };
 
-function BookmarkCard( { data, notifyParent } ) {
-
+function BookmarkCard({ data, notifyParent }) {
 	const handleClick = (e) => {
 		const id = e.currentTarget.id;
-	
-		fetch(`${server}/delete`, {
-			method: "POST",
+
+		fetch(`${server}/api/bookmark`, {
+			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
+				Authorization: `${window.sessionStorage.getItem("accessToken")}`,
 			},
-			body: JSON.stringify({ id: id })
+			body: JSON.stringify({
+				id: id,
+				userId: window.sessionStorage.getItem("userId"),
+			}),
 		})
-			.then((res) => res.json())
-			.then((data) => {
-				console.log(data);
-				// Notify parent component
+			.then((res) => {
+				if (!res.ok) throw new Error("Something went wrong");
 				notifyParent(id);
 			})
 			.catch((e) => console.log(e));
-	}
+	};
 
-  return (
-		<Card 
-		className="max-w-sm space-x-1 space-y-1"
-		imgAlt="Meaningful alt text for the image"
-		imgSrc={data.image}
+	return (
+		<Card
+			className="max-w-sm"
+			imgAlt="Meaningful alt text for the image"
+			imgSrc={data.image}
 		>
-			<a href={data.url} target='_blank'>
+			<a href={data.url} target="_blank">
 				<h5 className="text-2xl font-bold tracking-tight text-gray-600 dark:text-white">
 					{data.title}
 				</h5>
 				<p className="font-normal text-gray-700 dark:text-gray-400">
-					{data.description.slice(0,200) + "..."}
+					{data.description.slice(0, 200) + "..."}
 				</p>
 			</a>
 			<Flowbite theme={{ theme: customTheme }}>
@@ -53,8 +54,7 @@ function BookmarkCard( { data, notifyParent } ) {
 				</Button>
 			</Flowbite>
 		</Card>
-  );
+	);
 }
-
 
 export default BookmarkCard;
