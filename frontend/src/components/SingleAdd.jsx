@@ -38,6 +38,8 @@ function SingleAdd() {
 			})
 				.then((res) => {
 					if (!res.ok) throw new Error("Something went wrong");
+					// Clear url state
+					setUrl("");
 					// Reset flags after 2 seconds if toast not dismissed
 					const timer = setTimeout(() => {
 						setSubmitted(false);
