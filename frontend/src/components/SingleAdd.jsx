@@ -17,9 +17,13 @@ function SingleAdd() {
 	const [url, setUrl] = useState("");
 	const [submitted, setSubmitted] = useState(false);
 	const [validUrl, setValidUrl] = useState(false);
+	const urlInput = document.getElementById("url");
 
 	useEffect(() => {
 		if (validUrl) {
+			// Reset URL input field
+			urlInput.value = "";
+
 			// Send POST request to backend if URL is valid
 			fetch(`${server}/api/url`, {
 				method: "POST",
