@@ -6,8 +6,8 @@ function Footer() {
 		>
 			<p>
 				Made with <span className="line-through">Love</span> panic, aggravation,
-				and a dash of confusion, 3 bottles of vodka, frustration and,
-				apparently, pain.
+				a dash of confusion, 3 bottles of vodka, frustration and, apparently,
+				pain.
 				<svg
 					className="-mt-1 ml-1 text-red-400 w-5 h-auto fill-current inline-block"
 					xmlns="http://www.w3.org/2000/svg"
