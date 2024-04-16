@@ -71,9 +71,8 @@ function BookmarksPage() {
 
 	return (
 		<>
-			<h1 className="text-2xl font-bold mb-4 text-center">View Bookmarks</h1>
 			<SearchBar onSearch={search} />
-			<div className="flex flex-wrap gap-5 justify-center">
+			<div className="flex flex-wrap gap-8 justify-center mt-12">
 				{bookmarksList.length
 					? bookmarksList.map((bookmark) => (
 							<BookmarkCard

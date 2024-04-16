@@ -1,0 +1,17 @@
+:root {
+	/* light mode colors */
+	--lm-dark-green: #11310d;
+	--lm-med-green: #3f5b37;
+	--lm-light-green: #eef1d8;
+	--lm-dark-brown: #c9ab9b;
+	--lm-med-brown: #f2e4ce;
+	--lm-light-brown: #fefae0;
+
+	/* dark mode colors */
+	--dm-dark-green: #11310d;
+	--dm-med-green: #475b41;
+	--dm-light-green: #7f906b;
+	--dm-dark-brown: #403027;
+	--dm-med-brown: #dec4b6;
+	--dm-light-brown: #fffbe0;
+}

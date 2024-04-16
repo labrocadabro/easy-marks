@@ -3,16 +3,30 @@
 @tailwind utilities;
 
 @layer base {
+	body {
+		@apply bg-[#6B4944];
+	}
+
 	h1 {
 		@apply text-2xl font-bold;
 	}
 	h2 {
 		@apply text-xl font-bold;
 	}
+	header,
+	footer {
+		@apply bg-[#3F2626] text-[#fffbe0];
+	}
 }
 
 @layer components {
 	.nav-link {
-		@apply text-emerald-600 font-bold hover:underline underline-offset-2;
+		@apply text-[#eef1d8] font-bold hover:underline underline-offset-2;
+	}
+	.bookmark-card h5 {
+		font-family: "Poppins";
+	}
+	.bookmark-card {
+		font-family: "PT Serif";
 	}
 }

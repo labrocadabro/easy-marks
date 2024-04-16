@@ -35,25 +35,25 @@ function BookmarkCard({ data, notifyParent }) {
 	};
 
 	return (
-		<Card
-			className="max-w-sm"
-			imgAlt="Meaningful alt text for the image"
-			imgSrc={data.image}
-		>
+		<div className="max-w-sm bg-[#EAD8BE] p-5 rounded-md bookmark-card">
 			<a href={data.url} target="_blank">
-				<h5 className="text-2xl font-bold tracking-tight text-gray-600 dark:text-white">
+				<img src={data.image} alt={data.title} className="rounded-md" />
+				<h5 className="text-xl font-bold tracking-tight mt-4 mb-2">
 					{data.title}
 				</h5>
-				<p className="font-normal text-gray-700 dark:text-gray-400">
-					{data.description.slice(0, 200) + "..."}
-				</p>
 			</a>
+			<p className="p-0 mb-3">{data.description.slice(0, 225) + "..."}</p>
 			<Flowbite theme={{ theme: customTheme }}>
-				<Button color="primary" id={data.id} onClick={handleClick}>
+				<Button
+					color="primary"
+					id={data.id}
+					onClick={handleClick}
+					className="w-full"
+				>
 					<HiTrash className="h-5 w-5" />
 				</Button>
 			</Flowbite>
-		</Card>
+		</div>
 	);
 }
 
