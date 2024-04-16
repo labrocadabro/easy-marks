@@ -61,7 +61,7 @@ def add_url():
         bookmark = mongo.db.urls.find_one({"url": url, "user_id": user_id})
         # if the bookmark already exists, don't add to queue
         if bookmark:
-            return
+            return Response(status=200)
         ## insert url into database
         inserted = mongo.db["urls"].insert_one(
             {"url": url, "user_id": user_id, "status": "pending"}
