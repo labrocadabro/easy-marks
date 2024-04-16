@@ -71,8 +71,16 @@ function BookmarksPage() {
 
 	return (
 		<>
-			<h1 className="text-2xl font-bold mb-4 text-center">View Bookmarks</h1>
-			<SearchBar onSearch={search} />
+			<div className="grid grid-cols-12">
+				<div className='col-span-2'></div>
+				<div style={{marginBottom: "20px", backgroundColor: "#E8D9BF"}} className="col-span-8 p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+					<h1 className="text-2xl font-bold mb-4 text-center text-gray-900">View Bookmarks</h1>
+					<SearchBar onSearch={search} />
+					
+				</div>
+	
+			</div>
+
 			<div className="flex flex-wrap gap-5 justify-center">
 				{bookmarksList.length
 					? bookmarksList.map((bookmark) => (

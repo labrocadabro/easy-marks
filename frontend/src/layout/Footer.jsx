@@ -1,6 +1,6 @@
 function Footer() {
 	return (
-		<footer className="content-center bottom-0 w-full bg-slate-100 px-4 py-4">
+		<footer style={{backgroundColor: "#E5DDCE"}} className="content-center bottom-0 w-full px-4 py-4">
 			<p>
 				Made with <p className="line-through">Love</p> panic, aggravation, and a
 				dash of confusion, 3 bottles of vodka, frustration and, apparently,

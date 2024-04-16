@@ -62,9 +62,9 @@ function App() {
 					setFirstName,
 				]}
 			>
-				<div className="flex flex-col min-h-screen justify-between">
+				<div style={{backgroundColor: "#694945"}} className="min-h-screen flex flex-col justify-between">
 					<Header />
-					<main className="px-8 py-6 h-full">
+					<main className="px-8 py-6">
 						<Routes>
 							<Route path="/" element={<HomePage />} />
 							<Route element={<ProtectedRoutes />}>
