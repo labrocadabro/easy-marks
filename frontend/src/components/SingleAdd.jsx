@@ -20,9 +20,6 @@ function SingleAdd() {
 
 	useEffect(() => {
 		if (validUrl) {
-			// Reset URL input field
-			setUrl("");
-
 			// Send POST request to backend if URL is valid
 			fetch(`${server}/api/url`, {
 				method: "POST",
@@ -39,10 +36,10 @@ function SingleAdd() {
 					if (!res.ok) throw new Error("Something went wrong");
 					// Clear url state
 					setUrl("");
+					setValidUrl(false);
 					// Reset flags after 2 seconds if toast not dismissed
 					const timer = setTimeout(() => {
 						setSubmitted(false);
-						setValidUrl(false);
 					}, 2000);
 					return () => clearTimeout(timer);
 				})
@@ -92,7 +89,7 @@ function SingleAdd() {
 						name="url"
 						className="mb-6"
 						value={url}
-						onChange={e => setUrl(e.target.value)}
+						onChange={(e) => setUrl(e.target.value)}
 						placeholder="https://example.com"
 						rightIcon={HiLink}
 						required
