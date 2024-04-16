@@ -2,9 +2,11 @@ import BookmarkCard from "../components/BookmarkCard";
 import { useState, useEffect } from "react";
 import SearchBar from "../components/SearchBar";
 import { server } from "../config/server";
+import Spinner from "../components/Spinner";
 
 function BookmarksPage() {
 	const [bookmarksList, setBookmarksList] = useState([]);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		fetch(
@@ -30,8 +32,9 @@ function BookmarksPage() {
 				}));
 				setBookmarksList(bookmarks);
 			})
-			.catch((e) => console.log(e));
-	}, []);
+			.catch((e) => console.log(e))
+			.finally(() => setLoading(false));
+	}, [loading]);
 
 	function search(value) {
 		fetch(`${server}/search`, {
@@ -73,16 +76,21 @@ function BookmarksPage() {
 	return (
 		<>
 			<div className="grid grid-cols-12">
-				<div className='col-span-2'></div>
-				<div style={{marginBottom: "20px", backgroundColor: "#E8D9BF"}} className="col-span-8 p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-					<h1 className="text-2xl font-bold mb-4 text-center text-gray-900">View Bookmarks</h1>
+				<div className="col-span-2"></div>
+				<div
+					style={{ marginBottom: "20px", backgroundColor: "#E8D9BF" }}
+					className="col-span-8 p-4 text-center bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+				>
+					<h1 className="text-2xl font-bold mb-4 text-gray-900">
+						View Bookmarks
+					</h1>
 					<SearchBar onSearch={search} />
-					
+					{!bookmarksList.length ? "No bookmarks yet" : ""}
 				</div>
-	
 			</div>
 
 			<div className="flex flex-wrap gap-5 justify-center">
+				{loading && <Spinner className="w-48 text-[#E8D9BF] opacity-80" />}
 				{bookmarksList.length
 					? bookmarksList.map((bookmark) => (
 							<BookmarkCard
@@ -91,7 +99,7 @@ function BookmarksPage() {
 								notifyParent={updateBookmarks}
 							/>
 					  ))
-					: "No bookmarks yet"}
+					: ""}
 			</div>
 		</>
 	);

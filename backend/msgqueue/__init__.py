@@ -16,9 +16,9 @@ queue = Blueprint("queue", __name__)
 @queue.post("/api/urls")
 def add_urls():
     try:
+        user_id = request.form.get("userId")
         # this will throw an error if the session isn't valid
-        valid_session(request)
-        user_id = request.json.get("userId")
+        valid_session(request, user_id)
         # process file to get URLs
         # Store file from incoming request
         file = request.files["file"]
@@ -58,10 +58,19 @@ def add_url():
         valid_session(request)
         url = url_prefixer(request.json.get("url"))
         # check for existing entry
-        bookmark = mongo.db.urls.find_one({"url": url, "user_id": user_id})
+        # at this point, the prefixer has added http to any url that didn't have it
+        if url.startswith("http:"):
+            http_url = url
+            https_url = "https" + url[4:]
+        else:
+            http_url = "http" + url[5:]
+            https_url = url
+
+        http_bookmark = mongo.db.urls.find_one({"url": http_url, "user_id": user_id})
+        https_bookmark = mongo.db.urls.find_one({"url": https_url, "user_id": user_id})
         # if the bookmark already exists, don't add to queue
-        if bookmark:
-            return
+        if http_bookmark or https_bookmark:
+            return Response(status=200)
         ## insert url into database
         inserted = mongo.db["urls"].insert_one(
             {"url": url, "user_id": user_id, "status": "pending"}

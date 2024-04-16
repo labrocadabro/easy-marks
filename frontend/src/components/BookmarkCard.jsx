@@ -37,9 +37,9 @@ function BookmarkCard({ data, notifyParent }) {
 
 	return data.status === "pending" ? (
 		<div className="relative">
-			<Spinner className="absolute top-1/4 left-1/3" />
+			<Spinner className="absolute top-1/4 left-1/4 w-48 text-[#694945] z-10" />
 			<Card
-				className="max-w-sm opacity-40"
+				className="max-w-sm opacity-40 aspect-[1.1]"
 				imgAlt="Meaningful alt text for the image"
 				imgSrc="public/blank.png"
 			>
@@ -48,8 +48,8 @@ function BookmarkCard({ data, notifyParent }) {
 		</div>
 	) : (
 		<Card
-			style={{backgroundColor: "#E8D9BF"}}
-			className="max-w-sm"
+			style={{ backgroundColor: "#E8D9BF" }}
+			className="max-w-sm aspect-[1.1]"
 			imgAlt="Meaningful alt text for the image"
 			imgSrc={data.image}
 		>
@@ -59,7 +59,9 @@ function BookmarkCard({ data, notifyParent }) {
 				</h5>
 			</a>
 			<p className="font-normal text-gray-700 dark:text-gray-400">
-				{data.description.slice(0, 200) + "..."}
+				{data.description.length > 200
+					? data.description.slice(0, 200) + "..."
+					: data.description}
 			</p>
 			<Flowbite theme={{ theme: customTheme }}>
 				<Button color="primary" id={data.id} onClick={handleClick}>

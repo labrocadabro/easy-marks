@@ -11,7 +11,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import ProtectedRoutes from "./components/ProtectedRoute";
 
 function App() {
-	const [loggedIn, setLoggedIn] = useState(false);
+	const [loggedIn, setLoggedIn] = useState(null);
 	const [photo, setPhoto] = useState("");
 	const [firstName, setFirstName] = useState("");
 
@@ -30,7 +30,7 @@ function App() {
 			})
 				.then((res) => {
 					if (!res.ok) throw new Error("Something went wrong");
-						return res.json();
+					return res.json();
 				})
 				.then((data) => {
 					if (data) {
@@ -42,10 +42,12 @@ function App() {
 					} else {
 						window.sessionStorage.removeItem("accessToken");
 						window.sessionStorage.removeItem("userId");
+						setLoggedIn(false);
 					}
 				})
 				.catch((e) => {
 					console.log(e);
+					setLoggedIn(false);
 				});
 		}
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -62,7 +64,10 @@ function App() {
 					setFirstName,
 				]}
 			>
-				<div style={{backgroundColor: "#694945"}} className="min-h-screen flex flex-col justify-between">
+				<div
+					style={{ backgroundColor: "#694945" }}
+					className="min-h-screen flex flex-col justify-between"
+				>
 					<Header />
 					<main className="px-8 py-6">
 						<Routes>

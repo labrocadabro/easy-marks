@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from backend.scraping import get_website_data
 from backend.summarize import summarize
 from backend.embed import embed
-from backend.database.db_utils import update
+from backend.database.db_utils import update, delete
 
 load_dotenv()
 
@@ -41,6 +41,8 @@ def callback(ch, method, properties, body):
         print(f" [x] Inserted {url}")
     except Exception as e:
         print(e)
+        print(f" [x] Failed to insert {url}")
+        delete(bookmark_id, user_id)
 
 
 channel.basic_consume(queue="bookmarks", auto_ack=True, on_message_callback=callback)
