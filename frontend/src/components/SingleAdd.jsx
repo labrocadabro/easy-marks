@@ -19,7 +19,7 @@ function SingleAdd() {
 	const [validUrl, setValidUrl] = useState(false);
 
 	useEffect(() => {
-		if (validUrl) {
+		if (validUrl && !!url) {
 			// Send POST request to backend if URL is valid
 			fetch(`${server}/api/url`, {
 				method: "POST",
@@ -36,10 +36,10 @@ function SingleAdd() {
 					if (!res.ok) throw new Error("Something went wrong");
 					// Clear url state
 					setUrl("");
-					setValidUrl(false);
 					// Reset flags after 2 seconds if toast not dismissed
 					const timer = setTimeout(() => {
 						setSubmitted(false);
+						setValidUrl(false);
 					}, 2000);
 					return () => clearTimeout(timer);
 				})
