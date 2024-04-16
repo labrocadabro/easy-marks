@@ -26,6 +26,7 @@ function BookmarksPage() {
 					title: item.title,
 					description: item.summary,
 					image: item.screenshot,
+					status: item.status,
 				}));
 				setBookmarksList(bookmarks);
 			})
