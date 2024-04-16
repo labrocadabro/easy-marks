@@ -10,6 +10,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from dotenv import load_dotenv
+import time
 
 load_dotenv()
 
@@ -26,12 +27,18 @@ def get_website_data(url):
         # In order to get Heroku deployment to work ,the path to chromium has to be set in an env variable
         # we can probably test is we're on localhost and switch this automatically but I'm tired of this right now
         # browser = p.chromium.launch()
+        ipad_pro = p.devices["iPad Pro 11 landscape"]
         browser = p.chromium.launch(
             executable_path=os.getenv("CHROMIUM_EXECUTABLE_PATH")
         )
-        page = browser.new_page()
+        context = browser.new_context(**ipad_pro)
+        page = context.new_page()
         page.goto(url)
         title = page.title()
+        # while title == "Just a moment...":
+        #     time.sleep(5)
+        #     title = page.title()
+
         content = page.content()
 
         # using the subdomain+domain as image name
