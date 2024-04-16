@@ -17,12 +17,11 @@ function SingleAdd() {
 	const [url, setUrl] = useState("");
 	const [submitted, setSubmitted] = useState(false);
 	const [validUrl, setValidUrl] = useState(false);
-	const urlInput = document.getElementById("url");
 
 	useEffect(() => {
 		if (validUrl) {
 			// Reset URL input field
-			urlInput.value = "";
+			setUrl("");
 
 			// Send POST request to backend if URL is valid
 			fetch(`${server}/api/url`, {
@@ -59,11 +58,6 @@ function SingleAdd() {
 		setValidUrl(isValidUrl(url));
 	};
 
-	// Update URL input as user types
-	const updateInput = (e) => {
-		setUrl(e.target.value);
-	};
-
 	// Validate URL using regex
 	const isValidUrl = (urlString) => {
 		const urlPattern = new RegExp(
@@ -97,10 +91,11 @@ function SingleAdd() {
 						id="url"
 						name="url"
 						className="mb-6"
+						value={url}
+						onChange={e => setUrl(e.target.value)}
 						placeholder="https://example.com"
-						required
 						rightIcon={HiLink}
-						onChange={updateInput}
+						required
 					/>
 				</div>
 				<Flowbite theme={{ theme: customTheme }}>
