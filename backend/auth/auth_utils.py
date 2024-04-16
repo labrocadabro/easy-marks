@@ -60,6 +60,7 @@ def get_profile_data(access_token, refresh=False, refresh_token=None):
             get_profile_data(access_token)
 
     if profile_response.status_code != 200:
+        print(profile_response)
         raise ExternalAPIException("Could not get profile data")
 
     return profile_response.json()
@@ -68,7 +69,7 @@ def get_profile_data(access_token, refresh=False, refresh_token=None):
 def valid_session(request, user_id=None):
     access_token = request.headers.get("Authorization")
     if not user_id:
-        user_id = request.get_json().get("userId")
+        user_id = request.json.get("userId")
     user_data = mongo.db["user"].find_one({"_id": ObjectId(user_id)})
 
     if not user_data:

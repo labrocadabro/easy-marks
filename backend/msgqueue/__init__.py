@@ -16,9 +16,9 @@ queue = Blueprint("queue", __name__)
 @queue.post("/api/urls")
 def add_urls():
     try:
+        user_id = request.form.get("userId")
         # this will throw an error if the session isn't valid
-        valid_session(request)
-        user_id = request.json.get("userId")
+        valid_session(request, user_id)
         # process file to get URLs
         # Store file from incoming request
         file = request.files["file"]

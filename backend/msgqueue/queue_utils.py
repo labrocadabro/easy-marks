@@ -9,7 +9,6 @@ params = pika.URLParameters(mq_url)
 
 
 def send(url, user_id, bookmark_id):
-    print("send")
     connection = pika.BlockingConnection(params)
     channel = connection.channel()  # start a channel
     channel.queue_declare(queue="bookmarks")  # Declare a queue
