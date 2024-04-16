@@ -19,7 +19,7 @@ function SingleAdd() {
 	const [validUrl, setValidUrl] = useState(false);
 
 	useEffect(() => {
-		if (validUrl && !!url) {
+		if (validUrl) {
 			// Send POST request to backend if URL is valid
 			fetch(`${server}/api/url`, {
 				method: "POST",
@@ -47,10 +47,13 @@ function SingleAdd() {
 					console.error("Error:", error);
 				});
 		}
-	}, [submitted, validUrl, url]);
+		// url should not be in the dependency array
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [submitted, validUrl]);
 
 	// Handle form submission
-	const handleSubmit = () => {
+	const handleSubmit = (e) => {
+		e.preventDefault();
 		setSubmitted(true);
 		setValidUrl(isValidUrl(url));
 	};
