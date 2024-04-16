@@ -1,6 +1,7 @@
 import { Card, Button, Flowbite } from "flowbite-react";
 import { HiTrash } from "react-icons/hi";
 import { server } from "../config/server";
+import Spinner from "./Spinner";
 
 // Custom theme to style delete button
 const customTheme = {
@@ -34,7 +35,18 @@ function BookmarkCard({ data, notifyParent }) {
 			.catch((e) => console.log(e));
 	};
 
-	return (
+	return data.status === "pending" ? (
+		<div className="relative">
+			<Spinner className="absolute top-1/4 left-1/3" />
+			<Card
+				className="max-w-sm opacity-40"
+				imgAlt="Meaningful alt text for the image"
+				imgSrc="public/blank.png"
+			>
+				<p className="text-center">{data.url}</p>
+			</Card>
+		</div>
+	) : (
 		<Card
 			className="max-w-sm"
 			imgAlt="Meaningful alt text for the image"
@@ -44,10 +56,10 @@ function BookmarkCard({ data, notifyParent }) {
 				<h5 className="text-2xl font-bold tracking-tight text-gray-600 dark:text-white">
 					{data.title}
 				</h5>
-				<p className="font-normal text-gray-700 dark:text-gray-400">
-					{data.description.slice(0, 200) + "..."}
-				</p>
 			</a>
+			<p className="font-normal text-gray-700 dark:text-gray-400">
+				{data.description.slice(0, 200) + "..."}
+			</p>
 			<Flowbite theme={{ theme: customTheme }}>
 				<Button color="primary" id={data.id} onClick={handleClick}>
 					<HiTrash className="h-5 w-5" />

@@ -57,6 +57,11 @@ def add_url():
         # this will throw an error if the session isn't valid
         valid_session(request)
         url = url_prefixer(request.json.get("url"))
+        # check for existing entry
+        bookmark = mongo.db.urls.find_one({"url": url, "user_id": user_id})
+        # if the bookmark already exists, don't add to queue
+        if bookmark:
+            return
         ## insert url into database
         inserted = mongo.db["urls"].insert_one(
             {"url": url, "user_id": user_id, "status": "pending"}

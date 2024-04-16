@@ -59,6 +59,7 @@ def get_all(user_id):
                 "url": 1,
                 "summary": 1,
                 "screenshot": 1,
+                "status": 1,
             },
         },
     ]
@@ -87,6 +88,7 @@ def get_search(query_vector, user_id):
                 "url": 1,
                 "summary": 1,
                 "screenshot": 1,
+                "status": 1,
                 "score": {
                     # Include search score in result set
                     "$meta": "vectorSearchScore"
