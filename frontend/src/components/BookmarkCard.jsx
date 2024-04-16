@@ -48,6 +48,7 @@ function BookmarkCard({ data, notifyParent }) {
 		</div>
 	) : (
 		<Card
+			style={{backgroundColor: "#E8D9BF"}}
 			className="max-w-sm"
 			imgAlt="Meaningful alt text for the image"
 			imgSrc={data.image}
