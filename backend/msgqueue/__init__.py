@@ -7,7 +7,7 @@ from backend.auth.auth_utils import valid_session
 import traceback
 
 # from pymongo import ReturnDocument
-# from backend import mongo
+from backend import mongo
 from .queue_utils import send
 
 queue = Blueprint("queue", __name__)
@@ -31,7 +31,18 @@ def add_urls():
                 urls.append(line)
         for url in urls:
             url = url_prefixer(url)
-            thread = Thread(target=send, args=(url, user_id))
+            # check for existing entry
+            bookmark = mongo.db.urls.find_one({"url": url, "user_id": user_id})
+            # if the bookmark already exists, don't add to queue
+            if bookmark:
+                return
+            # insert url into database
+            inserted = mongo.db.urls.insert_one(
+                {"url": url, "user_id": user_id, "status": "pending"}
+            )
+            bookmark_id = str(inserted.inserted_id)
+            # put url in message queue
+            thread = Thread(target=send, args=(url, user_id, bookmark_id))
             thread.start()
         return Response(status=200)
     except:
@@ -46,7 +57,13 @@ def add_url():
         # this will throw an error if the session isn't valid
         valid_session(request)
         url = url_prefixer(request.json.get("url"))
-        thread = Thread(target=send, args=(url, user_id))
+        ## insert url into database
+        inserted = mongo.db["urls"].insert_one(
+            {"url": url, "user_id": user_id, "status": "pending"}
+        )
+        bookmark_id = str(inserted.inserted_id)
+        # put url in message queue
+        thread = Thread(target=send, args=(url, user_id, bookmark_id))
         thread.start()
         return Response(status=200)
     except:

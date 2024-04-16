@@ -20,6 +20,26 @@ def insert(user_id, url, summary, img_path, embedding, title):
     return inserted.inserted_id  # Returns Object ID
 
 
+def update(bookmark_id, user_id, url, summary, img_path, embedding, title):
+    return mongo.db.urls.update_one(
+        {
+            "_id": ObjectId(bookmark_id),
+            "user_id": user_id,
+        },
+        {
+            "$set": {
+                "url": url,
+                "title": title,
+                "summary": summary,
+                "screenshot": img_path,
+                "vectorEmbeddings": embedding,
+                "status": "complete",
+            }
+        },
+        upsert=True,
+    )
+
+
 # Delete bookmark
 def delete(bookmark_id, user_id):
     # Delete bookmark by ID
