@@ -10,7 +10,6 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from dotenv import load_dotenv
-import time
 
 load_dotenv()
 
@@ -46,6 +45,8 @@ def get_website_data(url):
         result = cloudinary.uploader.upload(
             screenshot_path, unique_filename=True, overwrite=False
         )
+
+        os.remove(screenshot_path)
 
         browser.close()
 
