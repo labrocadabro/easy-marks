@@ -64,7 +64,7 @@ function BulkAdd() {
 		// Grab file extension from fileName
 		let ext = fileName.split(".").pop();
 
-		if (ext === "csv" || ext === "md") {
+		if (ext === "csv") {
 			setValidFile(true);
 		}
 	};
@@ -85,7 +85,7 @@ function BulkAdd() {
 					id="file"
 					name="file"
 					onChange={(e) => handleFileChosen(e.target.files[0])}
-					helperText="Upload .csv or .md files to import bookmarks"
+					helperText="Upload .csv file to import bookmarks"
 				/>
 				<Flowbite theme={{ theme: customTheme }}>
 					<Button

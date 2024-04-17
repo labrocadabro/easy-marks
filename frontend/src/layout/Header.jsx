@@ -53,7 +53,7 @@ function Header() {
 	};
 
 	return (
-		<header style={{background: "#E5DDCE"}} className="px-8 py-2 flex justify-between h-20 items-center">
+		<header className="px-8 py-2 flex justify-between h-20 items-center">
 			<nav>
 				<ul className="flex gap-6">
 					<li>
