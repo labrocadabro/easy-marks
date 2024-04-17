@@ -34,6 +34,8 @@ function SingleAdd() {
 			})
 				.then((res) => {
 					if (!res.ok) throw new Error("Something went wrong");
+					// Clear url state
+					setUrl("");
 					// Reset flags after 2 seconds if toast not dismissed
 					const timer = setTimeout(() => {
 						setSubmitted(false);
@@ -45,17 +47,15 @@ function SingleAdd() {
 					console.error("Error:", error);
 				});
 		}
-	}, [submitted, validUrl, url]);
+		// url should not be in the dependency array
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [submitted, validUrl]);
 
 	// Handle form submission
-	const handleSubmit = () => {
+	const handleSubmit = (e) => {
+		e.preventDefault();
 		setSubmitted(true);
 		setValidUrl(isValidUrl(url));
-	};
-
-	// Update URL input as user types
-	const updateInput = (e) => {
-		setUrl(e.target.value);
 	};
 
 	// Validate URL using regex
@@ -91,10 +91,11 @@ function SingleAdd() {
 						id="url"
 						name="url"
 						className="mb-6"
+						value={url}
+						onChange={(e) => setUrl(e.target.value)}
 						placeholder="https://example.com"
-						required
 						rightIcon={HiLink}
-						onChange={updateInput}
+						required
 					/>
 				</div>
 				<Flowbite theme={{ theme: customTheme }}>

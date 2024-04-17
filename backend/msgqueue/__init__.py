@@ -7,7 +7,7 @@ from backend.auth.auth_utils import valid_session
 import traceback
 
 # from pymongo import ReturnDocument
-# from backend import mongo
+from backend import mongo
 from .queue_utils import send
 
 queue = Blueprint("queue", __name__)
@@ -16,9 +16,9 @@ queue = Blueprint("queue", __name__)
 @queue.post("/api/urls")
 def add_urls():
     try:
+        user_id = request.form.get("userId")
         # this will throw an error if the session isn't valid
-        valid_session(request)
-        user_id = request.json.get("userId")
+        valid_session(request, user_id)
         # process file to get URLs
         # Store file from incoming request
         file = request.files["file"]
@@ -31,7 +31,18 @@ def add_urls():
                 urls.append(line)
         for url in urls:
             url = url_prefixer(url)
-            thread = Thread(target=send, args=(url, user_id))
+            # check for existing entry
+            bookmark = mongo.db.urls.find_one({"url": url, "user_id": user_id})
+            # if the bookmark already exists, don't add to queue
+            if bookmark:
+                return
+            # insert url into database
+            inserted = mongo.db.urls.insert_one(
+                {"url": url, "user_id": user_id, "status": "pending"}
+            )
+            bookmark_id = str(inserted.inserted_id)
+            # put url in message queue
+            thread = Thread(target=send, args=(url, user_id, bookmark_id))
             thread.start()
         return Response(status=200)
     except:
@@ -46,7 +57,27 @@ def add_url():
         # this will throw an error if the session isn't valid
         valid_session(request)
         url = url_prefixer(request.json.get("url"))
-        thread = Thread(target=send, args=(url, user_id))
+        # check for existing entry
+        # at this point, the prefixer has added http to any url that didn't have it
+        if url.startswith("http:"):
+            http_url = url
+            https_url = "https" + url[4:]
+        else:
+            http_url = "http" + url[5:]
+            https_url = url
+
+        http_bookmark = mongo.db.urls.find_one({"url": http_url, "user_id": user_id})
+        https_bookmark = mongo.db.urls.find_one({"url": https_url, "user_id": user_id})
+        # if the bookmark already exists, don't add to queue
+        if http_bookmark or https_bookmark:
+            return Response(status=200)
+        ## insert url into database
+        inserted = mongo.db["urls"].insert_one(
+            {"url": url, "user_id": user_id, "status": "pending"}
+        )
+        bookmark_id = str(inserted.inserted_id)
+        # put url in message queue
+        thread = Thread(target=send, args=(url, user_id, bookmark_id))
         thread.start()
         return Response(status=200)
     except:

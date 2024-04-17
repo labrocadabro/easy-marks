@@ -57,7 +57,8 @@ function BulkAdd() {
 	};
 
 	// Handle file upload
-	const handleUpload = () => {
+	const handleUpload = (e) => {
+		e.preventDefault();
 		setSubmitted(true);
 
 		// Grab file extension from fileName
