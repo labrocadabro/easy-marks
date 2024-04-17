@@ -5,6 +5,7 @@
 @layer base {
 	body {
 		@apply bg-[#6B4944];
+		font-family: "Poppins";
 	}
 
 	h1 {
@@ -23,10 +24,7 @@
 	.nav-link {
 		@apply text-[#eef1d8] font-bold hover:underline underline-offset-2;
 	}
-	.bookmark-card h5 {
-		font-family: "Poppins";
-	}
-	.bookmark-card {
+	.bookmark-card p {
 		font-family: "PT Serif";
 	}
 }

@@ -1,17 +1,9 @@
-import { Card, Button, Flowbite } from "flowbite-react";
+// disabling the prop types errors for now. ideally we should just use typescript
+/* eslint-disable react/prop-types */
+
 import { HiTrash } from "react-icons/hi";
 import { server } from "../config/server";
 import Spinner from "./Spinner";
-
-// Custom theme to style delete button
-const customTheme = {
-	button: {
-		color: {
-			primary:
-				"bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white",
-		},
-	},
-};
 
 function BookmarkCard({ data, notifyParent }) {
 	const handleClick = (e) => {
@@ -37,42 +29,35 @@ function BookmarkCard({ data, notifyParent }) {
 
 	return data.status === "pending" ? (
 		<div className="relative">
-			<Spinner className="absolute top-1/4 left-1/4 w-48 text-[#694945] z-10" />
-			<div
-				className="max-w-sm opacity-40 aspect-[1.1] p-5 rounded-md bookmark-card"
-				imgAlt="Meaningful alt text for the image"
-				imgSrc="public/blank.png"
-			>
-				<p className="text-center">{data.url}</p>
+			<Spinner className="absolute top-[9%] left-1/4 w-48 text-[#6B4944] z-10" />
+			<div className="max-w-sm opacity-40 bg-[#EAD8BE]  aspect-[0.75] p-5 rounded-md bookmark-card">
+				<img src="public/blank.png" alt={data.url} className="rounded-md" />
+				<p className="text-center mt-4">{data.url}</p>
 			</div>
 		</div>
 	) : (
-		<div
-			className="max-w-sm aspect-[1.1] bg-[#EAD8BE] p-5 rounded-md bookmark-card"
-			imgAlt={data.title}
-			imgSrc={data.image}
-		>
+		<div className="max-w-sm aspect-[0.7] bg-[#EAD8BE] p-5 rounded-md bookmark-card relative">
 			<a href={data.url} target="_blank">
 				<img src={data.image} alt={data.title} className="rounded-md" />
 				<h5 className="text-xl font-bold tracking-tight mt-4 mb-2">
-					{data.title}
+					{data.title.length > 55
+						? data.title.slice(0, 55) + "..."
+						: data.title}
 				</h5>
 			</a>
-			<p className="font-normal text-gray-700 dark:text-gray-400">
-				{data.description.length > 200
-					? data.description.slice(0, 200) + "..."
+			<p>
+				{data.description.length > 220
+					? data.description.slice(0, 220) + "..."
 					: data.description}
 			</p>
-			<Flowbite theme={{ theme: customTheme }}>
-				<Button
-					color="primary"
-					id={data.id}
-					onClick={handleClick}
-					className="w-full"
-				>
-					<HiTrash className="h-5 w-5" />
-				</Button>
-			</Flowbite>
+			<button
+				color="primary"
+				id={data.id}
+				onClick={handleClick}
+				className="w-11/12 absolute bg-emerald-600 rounded-md py-2 px-4 bottom-5 flex justify-center text-white"
+			>
+				<HiTrash className="h-5 w-5" />
+			</button>
 		</div>
 	);
 }

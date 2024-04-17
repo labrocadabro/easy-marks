@@ -75,12 +75,8 @@ function BookmarksPage() {
 
 	return (
 		<>
-			<SearchBar onSearch={search} />
-			<div className="flex flex-wrap gap-8 justify-center mt-12">
-				<h1 className="text-2xl font-bold mb-4 text-gray-900">
-					View Bookmarks
-				</h1>
-				<SearchBar onSearch={search} />
+			<div className="flex flex-col mx-auto max-w-2xl p-6 bg-[#EAD8BE] rounded-md w-full md:w-1/2 items-center my-8">
+				<SearchBar onSearch={search} className="w-full mb-4" />
 				{!bookmarksList.length ? "No bookmarks yet" : ""}
 			</div>
 
