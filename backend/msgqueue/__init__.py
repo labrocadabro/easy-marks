@@ -1,4 +1,4 @@
-""" Message queue (send) """
+""" Message queue (send) - API Endpoints"""
 
 from flask import Blueprint, request, jsonify, Response
 from threading import Thread
@@ -13,6 +13,7 @@ from .queue_utils import send
 queue = Blueprint("queue", __name__)
 
 
+# Add multiple URLs to the queue
 @queue.post("/api/urls")
 def add_urls():
     try:
@@ -50,6 +51,7 @@ def add_urls():
         return Response(status=500)
 
 
+# Add a single URL to the queue
 @queue.post("/api/url")
 def add_url():
     try:

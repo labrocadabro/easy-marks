@@ -1,13 +1,17 @@
+"""Queue Utils module for sending messages to the queue."""
+
+import os
 import pika
 from dotenv import load_dotenv
 
+
+# Load environment variables
 load_dotenv()
-import os
 
 mq_url = os.getenv("CLOUDAMQP_URL")
 params = pika.URLParameters(mq_url)
 
-
+# Send a message to the queue
 def send(url, user_id, bookmark_id):
     connection = pika.BlockingConnection(params)
     channel = connection.channel()  # start a channel

@@ -20,6 +20,7 @@ def insert(user_id, url, summary, img_path, embedding, title):
     return inserted.inserted_id  # Returns Object ID
 
 
+# Update bookmark
 def update(bookmark_id, user_id, url, summary, img_path, embedding, title):
     return mongo.db.urls.update_one(
         {

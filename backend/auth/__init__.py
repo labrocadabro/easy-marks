@@ -1,4 +1,4 @@
-"""Auth Endpoints"""
+"""Auth Endpoints - Login and Session Check"""
 
 from flask import Blueprint, request, jsonify, Response
 from pymongo import ReturnDocument
@@ -9,6 +9,7 @@ import traceback
 auth = Blueprint("auth", __name__)
 
 
+# Attempt to login with google oauth
 @auth.post("/auth/login")
 def login():
     try:
@@ -56,7 +57,7 @@ def login():
         print(traceback.format_exc())
         return Response(status=500)
 
-
+# Check if the session is valid
 @auth.post("/auth/session")
 def check_session():
     try:

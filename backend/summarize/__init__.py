@@ -1,10 +1,10 @@
-"""Summarization Module - Azure"""
+"""Summarization Module - Azure OpenAI"""
 
 import os
 from azure.ai.textanalytics import TextAnalyticsClient
 from azure.core.credentials import AzureKeyCredential
 
-# environment variables must be named "LANGUAGE_KEY" and "LANGUAGE_ENDPOINT"
+# Environment variables must be named "LANGUAGE_KEY" and "LANGUAGE_ENDPOINT"
 key = os.environ.get("LANGUAGE_KEY")
 endpoint = os.environ.get("LANGUAGE_ENDPOINT")
 
@@ -17,11 +17,10 @@ def authenticate_client():
     )
     return text_analytics_client
 
-
 client = authenticate_client()
 
 
-# Example method for summarizing text
+# Summarize input text
 def summarize(document):
     # summarization takes list of documents(documents can be strings)
     poller = client.begin_abstract_summary(document)

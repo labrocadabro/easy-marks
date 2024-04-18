@@ -1,18 +1,21 @@
-"""Web Scraping - Playwright"""
+"""Web scraping module for extracting text from website using Playwright."""
 
+import os
 import re
+from pathlib import Path
+from playwright.sync_api import sync_playwright
 import tldextract
 from bs4 import BeautifulSoup
-from playwright.sync_api import sync_playwright
-from pathlib import Path
-import os
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from dotenv import load_dotenv
 
+
+# Load environment variables
 load_dotenv()
 
+# Configure Cloudinary
 config = cloudinary.config(
     api_key=os.getenv("CLOUDINARY_API_KEY"),
     cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
@@ -20,12 +23,13 @@ config = cloudinary.config(
 )
 
 
+# Custom exception for Playwright
 class PlaywrightException(Exception):
     def __init__(self, message):
         super().__init__(message)
 
 
-# function to return website title, text and save screenshot
+# Function to return website title, text and save screenshot
 def get_website_data(url):
     try:
         with sync_playwright() as p:
