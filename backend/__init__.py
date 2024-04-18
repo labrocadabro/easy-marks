@@ -18,16 +18,6 @@ CORS(app)
 app.config["MONGO_URI"] = os.getenv("MONGODB_URI")
 mongo = PyMongo(app)
 
-# Import blueprints
-from .auth import auth
-from .database import db
-from .msgqueue import queue
-
-# Register blueprints
-app.register_blueprint(auth)
-app.register_blueprint(db)
-app.register_blueprint(queue)
-
 
 # Default route to serve the frontend
 @app.route("/", defaults={"path": ""})
@@ -39,3 +29,15 @@ def catch_all(path):
 @app.errorhandler(404)
 def not_found(e):
     return app.send_static_file("index.html")
+
+
+### These must be at the EOF to avoid circular imports ###
+# Import blueprints
+from .auth import auth
+from .database import db
+from .msgqueue import queue
+
+# Register blueprints
+app.register_blueprint(auth)
+app.register_blueprint(db)
+app.register_blueprint(queue)
