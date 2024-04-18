@@ -11,6 +11,15 @@ __Database:__ MongoDB
 
 __Dev/Prod Host:__ Heroku
 
+## Requirements
+
+- Google account for signing into the app (currently using Google Auth)
+- Azure embedding endpoint (or other emebdding API/service that uses text-embedding-ada-002 model)
+- Azure summarization endpoint (or other summarization API/service)
+- MongoDB account for storing users and their bookmarks
+- CloudAMQP account for message queue functionality
+- Cloudinary account for online image storage
+
 ## Get Started
 
 1. Clone this repository:
@@ -28,6 +37,10 @@ pip install -r requirements.txt
 cd frontend
 npm install
 ```
+
+4. Locate the 'example.env' file in the `backend` folder and replace environment variables with your own.
+
+5. Rename 'example.env' to `.env`.
 
 ## To Run
 
@@ -50,3 +63,5 @@ cd frontend
 ```bash
 npm run dev
 ```
+
+5. Sign into Easy Marks with your Google account and explore!
