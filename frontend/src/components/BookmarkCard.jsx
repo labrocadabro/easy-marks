@@ -36,7 +36,7 @@ function BookmarkCard({ data, notifyParent }) {
 			</div>
 		</div>
 	) : (
-		<div className="max-w-sm aspect-[0.7] bg-[#EAD8BE] p-5 rounded-md bookmark-card relative">
+		<div className="group max-w-sm aspect-[0.7] bg-[#EAD8BE] p-5 rounded-md bookmark-card relative">
 			<a href={data.url} target="_blank">
 				<img src={data.image} alt={data.title} className="rounded-md" />
 				<h5 className="text-xl font-bold tracking-tight mt-4 mb-2">
@@ -54,7 +54,7 @@ function BookmarkCard({ data, notifyParent }) {
 				color="primary"
 				id={data.id}
 				onClick={handleClick}
-				className="w-11/12 absolute bg-emerald-600 rounded-md py-2 px-4 bottom-5 flex justify-center text-white"
+				className="invisible group-hover:visible w-11/12 absolute bg-emerald-600 rounded-md py-2 px-4 bottom-5 flex justify-center text-white"
 			>
 				<HiTrash className="h-5 w-5" />
 			</button>

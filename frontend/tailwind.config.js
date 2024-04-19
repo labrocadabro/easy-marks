@@ -10,4 +10,9 @@ export default {
 	plugins: [
 		require('flowbite/plugin')
 	],
+	variants: {
+		extend: {
+			display: ["group-hover"],
+		},
+	},
 };
