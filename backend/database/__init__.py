@@ -1,15 +1,16 @@
-"""Database Endpoints"""
+"""Database API Endpoints"""
 
+import traceback
 from flask import Blueprint, request, jsonify, Response
 from bson.json_util import dumps
 from backend.embed import embed
-from .db_utils import delete, get_all, get_search
 from backend.auth.auth_utils import valid_session
-import traceback
+from .db_utils import delete, get_all, get_search
 
 db = Blueprint("db", __name__)
 
 
+# Handle search requests
 @db.post("/search")
 def search_bookmarks():
     try:
@@ -25,6 +26,7 @@ def search_bookmarks():
         return Response(status=500)
 
 
+# Get all bookmarks for a user
 @db.route("/api/user/<user_id>/bookmarks")
 def get_all_bookmarks(user_id):
     try:
@@ -50,6 +52,7 @@ def update_bookmark():
         return Response(status=500)
 
 
+# Delete a bookmark
 @db.delete("/api/bookmark")
 def delete_bookmark():
     try:

@@ -1,4 +1,4 @@
-"""Auth Utility Functions"""
+"""Auth Utility Functions - Token and Session Management"""
 
 import os
 import requests
@@ -6,6 +6,7 @@ from backend import mongo
 from bson.objectid import ObjectId
 
 
+# Custom Exceptions
 class ExternalAPIException(Exception):
     def __init__(self, message):
         super().__init__(message)
@@ -21,6 +22,7 @@ class UserMismatchException(Exception):
         super().__init__(message)
 
 
+# Get tokens from google oauth
 def get_tokens(key, type):
     data = {
         "client_id": os.getenv("GOOGLE_CLIENT_ID"),
@@ -44,6 +46,7 @@ def get_tokens(key, type):
     return (access_token, refresh_token)
 
 
+# Get profile data from google oauth
 def get_profile_data(access_token, refresh=False, refresh_token=None):
     profile_response = requests.get(
         "https://www.googleapis.com/oauth2/v3/userinfo",
@@ -66,6 +69,7 @@ def get_profile_data(access_token, refresh=False, refresh_token=None):
     return profile_response.json()
 
 
+# Check if the session is valid
 def valid_session(request, user_id=None):
     access_token = request.headers.get("Authorization")
     if not user_id:
